@@ -1,11 +1,18 @@
+import React from "react";
 import './App.css';
+import '../header/Header.css';
+import {withRouter} from "../../WithRouter";
+import Header from "../header/Header";
 
-function App() {
-  return (
-    <div className="App">
+class App extends React.Component {
 
-    </div>
-  );
+    render() {
+        return (
+            <div className="App">
+                <Header/>
+            </div>
+        );
+    }
 }
 
-export default App;
+export default withRouter(App);
