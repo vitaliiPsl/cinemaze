@@ -1,12 +1,14 @@
 package com.example.cinema.model.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Objects;
 
 
-@Data
+@Data @NoArgsConstructor @AllArgsConstructor
 @Entity
 @Table(name = "role")
 public class Role {

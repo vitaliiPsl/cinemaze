@@ -2,6 +2,7 @@ package com.example.cinema.model.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -9,8 +10,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-@Data
-@AllArgsConstructor
+@Data @NoArgsConstructor @AllArgsConstructor
 @Entity
 @Table(name = "person")
 public class User {
@@ -42,9 +42,6 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id", nullable = false)
     )
     private Set<Role> roles = new HashSet<>();
-
-    public User() {
-    }
 
     public void addRole(Role role){
         this.roles.add(role);
