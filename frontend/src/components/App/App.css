@@ -28,6 +28,7 @@
 }
 
 input {
+  width: 100%;
   padding: 8px 16px;
 
   font-size: 16px;
@@ -43,7 +44,7 @@ input {
 input:focus {
   outline: none;
   color: var(--background-color);
-  background: var(--main-color);
+  background: var(--background-focus);
 }
 
 button {
@@ -59,7 +60,9 @@ button {
 
 button:hover {
   color: var(--background-color);
-  background: var(--main-color);
+  /*background: var(--background-focus);*/
+  border-color: var(--highlight-color);
+  background: var(--highlight-color);
 }
 
 button:focus {

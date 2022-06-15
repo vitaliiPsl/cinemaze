@@ -1,0 +1,43 @@
+.Auth{
+    width: 100%;
+    flex-grow: 1;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth-wrapper{
+    width: 500px;
+    height: fit-content;
+
+    padding: 48px 24px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+
+    border-radius: 10px;
+    /*box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;*/
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+}
+
+.auth-wrapper form{
+    width: 100%;
+}
+
+.questions-box{
+    transition: 0.5s;
+}
+
+.questions-box:hover{
+    letter-spacing: 1px;
+}
+
+@media screen and (max-width: 800px) {
+    form{
+        width: 80%;
+    }
+}

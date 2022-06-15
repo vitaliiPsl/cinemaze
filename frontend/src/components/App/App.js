@@ -3,8 +3,11 @@ import './App.css';
 import '../header/Header.css';
 import {withRouter} from "../../WithRouter";
 import Header from "../header/Header";
+import {Route, Routes} from "react-router-dom";
 import authService from "../../services/auth.service";
 import {MainContext} from "./MainContext";
+import Login from "../auth/Login";
+import Signup from "../auth/Signup";
 import ErrorsBox from "../errors/ErrorsBox";
 
 class App extends React.Component {
@@ -61,6 +64,15 @@ class App extends React.Component {
                 <div className="App">
                     <Header/>
                     <ErrorsBox errors={this.state.errors} removeError={this.removeError}/>
+
+                    <div className="Main">
+                        <div className="container">
+                            <Routes>
+                                <Route path={'/login'} element={<Login/>}/>
+                                <Route path={'/signup'} element={<Signup/>}/>
+                            </Routes>
+                        </div>
+                    </div>
                 </div>
             </MainContext.Provider>
         );
