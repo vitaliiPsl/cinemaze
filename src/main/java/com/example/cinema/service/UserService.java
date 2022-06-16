@@ -1,7 +1,6 @@
 package com.example.cinema.service;
 
-import com.example.cinema.exceptions.RoleNotFoundException;
-import com.example.cinema.exceptions.UserNotFoundException;
+import com.example.cinema.exceptions.EntityNotFoundException;
 import com.example.cinema.model.entities.Role;
 import com.example.cinema.model.entities.User;
 import com.example.cinema.persistence.RoleRepository;
@@ -24,17 +23,17 @@ public class UserService {
     }
 
     public void saveClient(User user){
-        Role role = roleRepository.findByRole("CLIENT").orElseThrow(() ->  new RoleNotFoundException("CLIENT"));
+        Role role = roleRepository.findByRole("CLIENT").orElseThrow(() -> new EntityNotFoundException("CLIENT", Role.class));
         user.addRole(role);
 
         userRepository.save(user);
     }
 
     public void saveAdmin(User user){
-        Role role = roleRepository.findByRole("CLIENT").orElseThrow(() ->  new RoleNotFoundException("CLIENT"));
+        Role role = roleRepository.findByRole("CLIENT").orElseThrow(() ->  new EntityNotFoundException("CLIENT", Role.class));
         user.addRole(role);
 
-        role = roleRepository.findByRole("ADMIN").orElseThrow(() ->  new RoleNotFoundException("ADMIN"));
+        role = roleRepository.findByRole("ADMIN").orElseThrow(() ->  new EntityNotFoundException("ADMIN", Role.class));
         user.addRole(role);
 
         userRepository.save(user);
@@ -45,8 +44,8 @@ public class UserService {
     }
 
     public void addRoleToUser(long userId, long roleId){
-        User user = userRepository.findById(userId).orElseThrow(() ->  new UserNotFoundException(userId));
-        Role role = roleRepository.findById(roleId).orElseThrow(() ->  new RoleNotFoundException(roleId));
+        User user = userRepository.findById(userId).orElseThrow(() ->  new EntityNotFoundException(userId, User.class));
+        Role role = roleRepository.findById(roleId).orElseThrow(() ->  new EntityNotFoundException(roleId, Role.class));
 
         user.addRole(role);
         userRepository.save(user);

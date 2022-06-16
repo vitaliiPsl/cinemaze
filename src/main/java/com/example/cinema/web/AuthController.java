@@ -1,9 +1,9 @@
 package com.example.cinema.web;
 
-import com.example.cinema.AuthenticationRequestDto;
 import com.example.cinema.config.security.jwt.JwtUtils;
+import com.example.cinema.exceptions.EntityNotFoundException;
 import com.example.cinema.exceptions.UserAlreadyExistsException;
-import com.example.cinema.exceptions.UserNotFoundException;
+import com.example.cinema.model.dto.AuthenticationRequestDto;
 import com.example.cinema.model.dto.UserDto;
 import com.example.cinema.model.entities.User;
 import com.example.cinema.service.UserService;
@@ -13,7 +13,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.Map;
@@ -34,7 +33,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<Object> signup(@Valid @RequestBody User user, @RequestParam(value = "image", required = false) MultipartFile image){
+    public ResponseEntity<Object> signup(@Valid @RequestBody User user){
         // throw exception if there already is user with provided email
         String email = user.getEmail();
         Optional<User> existing = userService.getUser(email);
@@ -63,7 +62,7 @@ public class AuthController {
 
         // Find user by email
         String username = authentication.getName();
-        User user = userService.getUser(username).orElseThrow(() -> new UserNotFoundException(username));
+        User user = userService.getUser(username).orElseThrow(() -> new EntityNotFoundException(username, User.class));
         UserDto userDto = new UserDto(user);
 
         // return response entity containing user and authentication token
