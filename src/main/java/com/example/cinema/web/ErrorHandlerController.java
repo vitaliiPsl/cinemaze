@@ -1,6 +1,7 @@
 package com.example.cinema.web;
 
 import com.amazonaws.services.s3.model.AmazonS3Exception;
+import com.example.cinema.exceptions.EntityNotFoundException;
 import com.example.cinema.exceptions.UnsupportedImageTypeException;
 import com.example.cinema.exceptions.UserAlreadyExistsException;
 import com.example.cinema.model.errors.ApiError;
@@ -52,7 +53,12 @@ public class ErrorHandlerController {
         return buildResponseEntity(apiError);
     }
 
-    @ExceptionHandler(AmazonS3Exception.class)
+    @ExceptionHandler(EntityNotFoundException.class)
+    protected ResponseEntity<ApiError> handleEntityNotFoundException(EntityNotFoundException e) {
+        return buildResponseEntity(new ApiError(NOT_FOUND, e.getMessage(), e));
+    }
+
+        @ExceptionHandler(AmazonS3Exception.class)
     protected ResponseEntity<ApiError> handleAmazonS3Exception(AmazonS3Exception e){
         ApiError apiError = new ApiError(NOT_FOUND, "Couldn't find the image", e);
         return buildResponseEntity(apiError);
