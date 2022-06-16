@@ -19,20 +19,21 @@ public class User {
     private long id;
 
     @Column(name = "first_name")
-    @NotBlank
+    @NotBlank(message = "You need to provide your first name")
     private String firstName;
 
     @Column(name = "last_name")
-    @NotBlank
+    @NotBlank(message = "You need to provide your last name")
     private String lastName;
 
     @Column(name = "email", unique = true)
-    @Email(message = "Must be correct email address")
+    @NotBlank(message = "You have to provide your email")
+    @Email(message = "Your need to provide correct email address")
     private String email;
 
     @Column(name = "password")
-    @Size(min = 6, message = "Minimal password length - 6 characters")
     @NotBlank
+    @Size(min = 6, message = "Your password must contain at least 6 symbols")
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)
