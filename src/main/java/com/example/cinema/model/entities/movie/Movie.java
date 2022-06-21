@@ -1,5 +1,6 @@
 package com.example.cinema.model.entities.movie;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -25,6 +26,10 @@ public class Movie {
     private String posterImage;
 
     private String trailerUrl;
+
+    @JsonIgnoreProperties("movies")
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<Genre> genres = new HashSet<>();
 
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<String> previewImages = new HashSet<>();

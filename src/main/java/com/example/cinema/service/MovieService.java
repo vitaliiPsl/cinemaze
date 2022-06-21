@@ -1,6 +1,9 @@
 package com.example.cinema.service;
 
+import com.example.cinema.exceptions.EntityNotFoundException;
+import com.example.cinema.model.entities.movie.Genre;
 import com.example.cinema.model.entities.movie.Movie;
+import com.example.cinema.persistence.GenreRepository;
 import com.example.cinema.persistence.ImageRepository;
 import com.example.cinema.persistence.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +18,15 @@ import java.util.Optional;
 @Transactional
 public class MovieService {
     private final MovieRepository movieRepository;
+
+    private final GenreRepository genreRepository;
+
     private final ImageRepository imageRepository;
 
     @Autowired
-    public MovieService(MovieRepository movieRepository, ImageRepository imageRepository) {
+    public MovieService(MovieRepository movieRepository, GenreRepository genreRepository, ImageRepository imageRepository) {
         this.movieRepository = movieRepository;
+        this.genreRepository = genreRepository;
         this.imageRepository = imageRepository;
     }
 
@@ -63,5 +70,19 @@ public class MovieService {
 
     public List<Movie> getAllMovies(){
         return movieRepository.findAll();
+    }
+
+    public void addGenreToMovie(long movieId, long genreId){
+        Movie movie = movieRepository.findById(movieId).orElseThrow(() -> new EntityNotFoundException(movieId, Movie.class));
+        Genre genre = genreRepository.findById(genreId).orElseThrow(() -> new EntityNotFoundException(genreId, Genre.class));
+
+        movie.getGenres().add(genre);
+    }
+
+    public void removeGenreFromMovie(long movieId, long genreId){
+        Movie movie = movieRepository.findById(movieId).orElseThrow(() -> new EntityNotFoundException(movieId, Movie.class));
+        Genre genre = genreRepository.findById(genreId).orElseThrow(() -> new EntityNotFoundException(genreId, Genre.class));
+
+        movie.getGenres().remove(genre);
     }
 }
