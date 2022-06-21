@@ -27,9 +27,11 @@ public class MovieService {
         String poster = imageRepository.savePosterImage(posterImage);
         movie.setPosterImage(poster);
 
-        for (MultipartFile previewImage : previewImages) {
-            String preview = imageRepository.savePreviewImage(previewImage);
-            movie.addPreviewImage(preview);
+        if(previewImages != null && previewImages.length != 0) {
+            for (MultipartFile previewImage : previewImages) {
+                String preview = imageRepository.savePreviewImage(previewImage);
+                movie.addPreviewImage(preview);
+            }
         }
 
         movieRepository.save(movie);
