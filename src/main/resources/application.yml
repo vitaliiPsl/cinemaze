@@ -16,11 +16,13 @@ spring:
 server:
   port: ${SERVER_PORT}
 
-aws:
-  s3:
-    access-key-id: ${S3_ACCESS_KEY}
-    secret-access-key: ${S3_SECRET_KEY}
-    bucket-name: ${S3_BUCKET}
-    region: ${S3_REGION}
-    poster-folder: ${S3_POSTER_FOLDER}
-    preview-folder: ${S3_PREVIEW_FOLDER}
+images:
+  allowed-extensions-regex: (jp.?g|png|bmp|webp)
+  aws:
+    s3:
+      access-key-id: ${S3_ACCESS_KEY}
+      secret-access-key: ${S3_SECRET_KEY}
+      bucket-name: ${S3_BUCKET}
+      region: ${S3_REGION}
+      poster-folder: ${S3_POSTER_FOLDER}
+      preview-folder: ${S3_PREVIEW_FOLDER}
