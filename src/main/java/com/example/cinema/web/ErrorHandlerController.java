@@ -1,6 +1,7 @@
 package com.example.cinema.web;
 
 import com.amazonaws.services.s3.model.AmazonS3Exception;
+import com.example.cinema.exceptions.EntityAlreadyExistsException;
 import com.example.cinema.exceptions.EntityNotFoundException;
 import com.example.cinema.exceptions.UnsupportedImageTypeException;
 import com.example.cinema.exceptions.UserAlreadyExistsException;
@@ -40,6 +41,11 @@ public class ErrorHandlerController {
 
     @ExceptionHandler(UserAlreadyExistsException.class)
     protected ResponseEntity<ApiError> handleUserAlreadyExistsException(UserAlreadyExistsException e){
+        return buildResponseEntity(new ApiError(BAD_REQUEST, e.getMessage(), e));
+    }
+
+    @ExceptionHandler(EntityAlreadyExistsException.class)
+    protected ResponseEntity<ApiError> handleEntityAlreadyExistsException(EntityAlreadyExistsException e){
         return buildResponseEntity(new ApiError(BAD_REQUEST, e.getMessage(), e));
     }
 
