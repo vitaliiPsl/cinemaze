@@ -32,6 +32,12 @@ public class Movie {
     private Set<Genre> genres = new HashSet<>();
 
     @ElementCollection(fetch = FetchType.EAGER)
+    private Set<String> directors = new HashSet<>();
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Set<String> actors = new HashSet<>();
+
+    @ElementCollection(fetch = FetchType.EAGER)
     private Set<String> previewImages = new HashSet<>();
 
     @Size(min = 24, max = 1024, message = "You need to provide a short overview of this movie")
