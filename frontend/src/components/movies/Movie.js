@@ -5,6 +5,7 @@ import defaultPoster from '../../images/default-poster.jpg';
 import movieService, {POSTER_IMAGE_API, PREVIEW_IMAGE_API} from "../../services/movie.service";
 // import Slider from "../slider/Slider";
 import {MainContext} from "../App/MainContext";
+import Slider from "../slider/Slider";
 
 class Movie extends React.Component {
     static contextType = MainContext;
@@ -132,6 +133,10 @@ class Movie extends React.Component {
                         </div>
                     </div>
                 </div>
+
+                {this.state.movie.previewImages.length !== 0 &&
+                    <Slider slides={this.getPreviewImages()}/>
+                }
             </div>);
     }
 }
