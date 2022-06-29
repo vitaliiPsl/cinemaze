@@ -21,12 +21,13 @@ public class MovieController {
     }
 
     @PostMapping
-    public void saveMovie(
+    public Movie saveMovie(
             @Valid Movie movie,
             @RequestParam(value = "poster", required = false) MultipartFile posterImage,
             @RequestParam(value = "previews", required = false) MultipartFile[] previews
     ) {
         movieService.saveMovie(movie, posterImage, previews);
+        return movie;
     }
 
     @DeleteMapping("/{id}")
