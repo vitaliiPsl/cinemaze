@@ -69,7 +69,6 @@ export default class AddMovie extends React.Component {
 
     async saveMovie(movieData, genres) {
         let response = await movieService.saveMovie(movieData);
-        console.log(response);
 
         if (!response.ok) {
             this.context.handleError(response);
@@ -81,7 +80,6 @@ export default class AddMovie extends React.Component {
 
         for(let genreId of genres){
             response = await movieService.addGenreToMovie(movieId, genreId);
-            console.log(response);
 
             if (!response.ok) {
                 this.context.handleError(response);

@@ -17,10 +17,6 @@ export default class AdminPanel extends React.Component {
                             <div className="option-icon movies"></div>
                             <span>Movies</span>
                         </div>
-                        <div className="admin-option schedule">
-                            <div className="option-icon schedule"></div>
-                            <span>Schedule</span>
-                        </div>
                     </div>
 
                     <div className="admin-content">
