@@ -1,0 +1,90 @@
+.Movie{
+
+}
+
+.Movie .trailer-box{
+    width: 100%;
+    height: 400px;
+
+    background: url('../../icons/trailer.png') no-repeat center;
+    background-size: 10%;
+    overflow: hidden;
+}
+
+.Movie .container.movie-description{
+    background: var(--main-color);
+}
+
+.Movie .container.movie-description *{
+    color: var(--background-color);
+}
+
+.movie-description-box{
+    padding: 64px 0;
+
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.movie-description-box .movie-description{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.description-row{
+    display: flex;
+    justify-content: space-evenly;
+    gap: 16px;
+}
+
+.description-box{
+    width: 100%;
+
+    font-size: 14px;
+
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+}
+
+.description-list{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.description-list span{
+    margin-right: 12px;
+}
+
+.overview-box{
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.overview-box p{
+    color: #8e95a5;
+}
+
+.movie-description label{
+    font-weight: bold;
+}
+
+.movie-poster .movie-poster-wrapper{
+    height: 320px;
+    width: 200px;
+    margin: 0 48px;
+
+    /*box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;*/
+    box-shadow: 0 30px 30px rgba(00,00,00,.5);
+}
+
+.movie-poster-wrapper img{
+    height: 100%;
+    width: 100%;
+}

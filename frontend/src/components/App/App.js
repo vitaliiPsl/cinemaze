@@ -11,6 +11,7 @@ import Signup from "../auth/Signup";
 import ErrorsBox from "../errors/ErrorsBox";
 import MoviesList from "../movies/MoviesList";
 import AdminPanel from "../admin/AdminPanel";
+import Movie from "../movies/Movie";
 
 class App extends React.Component {
     constructor(props) {
@@ -70,6 +71,7 @@ class App extends React.Component {
                     <div className="Main">
                         <Routes>
                             <Route path={'/movies'} element={<MoviesList/>}/>
+                            <Route path={'/movies/:id'} element={<Movie/>}/>
                             <Route path={'/admin'} element={<AdminPanel/>}/>
                             <Route path={'/login'} element={<Login/>}/>
                             <Route path={'/signup'} element={<Signup/>}/>
