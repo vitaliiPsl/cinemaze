@@ -4,7 +4,6 @@ import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.example.cinema.exceptions.EntityAlreadyExistsException;
 import com.example.cinema.exceptions.EntityNotFoundException;
 import com.example.cinema.exceptions.UnsupportedImageTypeException;
-import com.example.cinema.exceptions.UserAlreadyExistsException;
 import com.example.cinema.model.errors.ApiError;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -45,13 +44,6 @@ public class ErrorHandlerController {
 
         String error = "Malformed JSON request";
         return buildResponseEntity(new ApiError(BAD_REQUEST, error, e));
-    }
-
-    @ExceptionHandler(UserAlreadyExistsException.class)
-    protected ResponseEntity<ApiError> handleUserAlreadyExistsException(UserAlreadyExistsException e){
-        log.error("handleUserAlreadyExistsException: {}", e.getMessage(), e);
-
-        return buildResponseEntity(new ApiError(BAD_REQUEST, e.getMessage(), e));
     }
 
     @ExceptionHandler(EntityAlreadyExistsException.class)
