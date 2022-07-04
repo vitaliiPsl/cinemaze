@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
+@Transactional
 public class GenreService {
     public final ModelMapper modelMapper;
     private final GenreRepository genreRepository;
