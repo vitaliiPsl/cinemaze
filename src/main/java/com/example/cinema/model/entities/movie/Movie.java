@@ -1,12 +1,10 @@
 package com.example.cinema.model.entities.movie;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
@@ -18,22 +16,24 @@ public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    @NotBlank(message = "Movie name is required")
     private String name;
-
-    private String posterImage;
-
     private String trailerUrl;
+    private String overview;
+    private long duration;
+
+    @JsonIgnoreProperties("movies")
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<Genre> genres = new HashSet<>();
 
     @ElementCollection(fetch = FetchType.EAGER)
+    private Set<String> directors = new HashSet<>();
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Set<String> actors = new HashSet<>();
+
+    private String posterImage;
+    @ElementCollection(fetch = FetchType.EAGER)
     private Set<String> previewImages = new HashSet<>();
-
-    @Size(min = 24, max = 1024, message = "You need to provide a short overview of this movie")
-    private String overview;
-
-    @Min(value = 1, message = "Movie duration cannot be shorter that 1 minute")
-    private long duration;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate releaseDate;

@@ -1,26 +1,30 @@
 package com.example.cinema.model.dto;
 
 import com.example.cinema.model.entities.Role;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import com.example.cinema.model.entities.User;
+import lombok.NoArgsConstructor;
 
-import java.util.Set;
-import java.util.stream.Collectors;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserDto {
     private long id;
+    private Role role;
+
     private String firstName;
     private String lastName;
-    private String username;
 
-    private Set<String> roles;
+    @Email
+    @NotBlank
+    private String email;
 
-    public UserDto(User user){
-        this.id = user.getId();
-        this.firstName = user.getFirstName();
-        this.lastName = user.getLastName();
-        this.username = user.getEmail();
-        this.roles = user.getRoles().stream().map(Role::getRole).collect(Collectors.toSet());
-    }
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @Size(min = 6)
+    private String password;
 }

@@ -47,13 +47,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable();
 
         http.authorizeRequests()
-                .antMatchers("/swagger-ui.html", "/swagger-ui/api-docs/swagger-config", "/swagger-ui/**").permitAll()
-                .antMatchers("/v3/api-docs").permitAll()
+                .antMatchers("/v3/api-docs", "/swagger-ui.html", "/swagger-ui/api-docs/swagger-config", "/swagger-ui/**").permitAll()
                 .antMatchers("/api/auth/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/movies/**").permitAll()
-                .antMatchers("/api/movies/**").hasAuthority("ADMIN")
-                .antMatchers("/api/users/admin").hasAuthority("ADMIN")
-                .antMatchers("/api/users/client").hasAuthority("CLIENT")
+                .antMatchers(HttpMethod.GET, "/api/movies/**", "/api/genres/**").permitAll()
+                .antMatchers("/api/movies/**", "/api/genres/**").hasAuthority("ADMIN")
                 .anyRequest().authenticated();
 
         http.sessionManagement()

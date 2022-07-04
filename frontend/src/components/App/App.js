@@ -9,6 +9,9 @@ import {MainContext} from "./MainContext";
 import Login from "../auth/Login";
 import Signup from "../auth/Signup";
 import ErrorsBox from "../errors/ErrorsBox";
+import MoviesList from "../movies/MoviesList";
+import AdminPanel from "../admin/AdminPanel";
+import Movie from "../movies/Movie";
 
 class App extends React.Component {
     constructor(props) {
@@ -66,12 +69,13 @@ class App extends React.Component {
                     <ErrorsBox errors={this.state.errors} removeError={this.removeError}/>
 
                     <div className="Main">
-                        <div className="container">
-                            <Routes>
-                                <Route path={'/login'} element={<Login/>}/>
-                                <Route path={'/signup'} element={<Signup/>}/>
-                            </Routes>
-                        </div>
+                        <Routes>
+                            <Route path={'/movies'} element={<MoviesList/>}/>
+                            <Route path={'/movies/:id'} element={<Movie/>}/>
+                            <Route path={'/admin'} element={<AdminPanel/>}/>
+                            <Route path={'/login'} element={<Login/>}/>
+                            <Route path={'/signup'} element={<Signup/>}/>
+                        </Routes>
                     </div>
                 </div>
             </MainContext.Provider>

@@ -21,25 +21,26 @@ import java.util.UUID;
 
 @Repository
 public class AwsImageRepositoryImpl implements ImageRepository {
-    @Value("${aws.s3.access-key-id}")
+    @Value("${images.aws.s3.access-key-id}")
     private String accessKey;
 
-    @Value("${aws.s3.secret-access-key}")
+    @Value("${images.aws.s3.secret-access-key}")
     private String secretKey;
 
-    @Value("${aws.s3.bucket-name}")
+    @Value("${images.aws.s3.bucket-name}")
     private String bucketName;
 
-    @Value("${aws.s3.region}")
+    @Value("${images.aws.s3.region}")
     private String region;
 
-    @Value("${aws.s3.poster-folder}")
+    @Value("${images.aws.s3.poster-folder}")
     public String postersFolder;
 
-    @Value("${aws.s3.preview-folder}")
+    @Value("${images.aws.s3.preview-folder}")
     public String previewFolder;
 
-    private static final String IMAGE_EXTENSION_REGEX = "(jp.g|png|bmp|webp)";
+    @Value("${images.allowed-extensions-regex}")
+    private static String IMAGE_EXTENSION_REGEX = "(jp.?g|png|bmp|webp)";
 
     private AmazonS3 getS3client() {
         AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);

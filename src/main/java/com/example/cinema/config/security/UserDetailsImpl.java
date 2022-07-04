@@ -15,13 +15,10 @@ public class UserDetailsImpl implements UserDetails {
     private final String password;
     private final List<GrantedAuthority> grantedAuthorities;
 
-    public UserDetailsImpl(User user){
+    public UserDetailsImpl(User user) {
         this.email = user.getEmail();
         this.password = user.getPassword();
-        this.grantedAuthorities = user.getRoles().stream()
-                    .map(Role::getRole)
-                    .map(SimpleGrantedAuthority::new)
-                    .collect(Collectors.toList());
+        this.grantedAuthorities = List.of(new SimpleGrantedAuthority(user.getRole().toString()));
     }
 
     @Override

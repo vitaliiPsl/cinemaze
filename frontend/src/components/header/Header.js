@@ -66,39 +66,48 @@ export default class Header extends React.Component {
                             }
 
                             {this.context.user &&
-                                <div className="profile-dropdown" onClick={this.toggleDropdown}>
-                                    <div className="profile-dropdown-control">
-                                        <div className="profile-dropdown-img">
-                                            {this.context.user.firstName[0]}
-                                        </div>
-                                        <span className="profile-dropdown-name">{this.context.user.firstName}</span>
-                                        <div className="profile-dropdown-arrow"></div>
-                                    </div>
-
-                                    {this.state.dropdown &&
-                                        <div className="profile-dropdown-menu">
-                                            <div className="dropdown-menu-item profile">
-                                                <NavLink to={`/profile`} className={'menu-link'}>
-                                                    <div className="icon profile-icon"></div>
-                                                    <span>Profile</span>
-                                                </NavLink>
-                                            </div>
-                                            <div className="dropdown-menu-item profile">
-                                                <NavLink to={`/tickets`} className={'menu-link'}>
-                                                    <div className="icon tickets-icon"></div>
-                                                    <span>My tickets</span>
-                                                </NavLink>
-                                            </div>
-                                            <div className="dropdown-menu-item log-out">
-                                                <NavLink onClick={this.handleLogout} to={`/logout`}
-                                                         className={'menu-link'}>
-                                                    <div className="icon log-out-icon"></div>
-                                                    <span>Log out</span>
-                                                </NavLink>
-                                            </div>
+                                <>
+                                    {this.context.user.roles.indexOf('ADMIN') !== -1 &&
+                                        <div className="menu-item">
+                                            <NavLink to={'/admin'} className={'menu-link'}>
+                                                <span>ADMIN</span>
+                                            </NavLink>
                                         </div>
                                     }
-                                </div>
+                                    <div className="profile-dropdown" onClick={this.toggleDropdown}>
+                                        <div className="profile-dropdown-control">
+                                            <div className="profile-dropdown-img">
+                                                {this.context.user.firstName[0]}
+                                            </div>
+                                            <span className="profile-dropdown-name">{this.context.user.firstName}</span>
+                                            <div className="profile-dropdown-arrow"></div>
+                                        </div>
+
+                                        {this.state.dropdown &&
+                                            <div className="profile-dropdown-menu">
+                                                <div className="dropdown-menu-item profile">
+                                                    <NavLink to={`/profile`} className={'menu-link'}>
+                                                        <div className="icon profile-icon"></div>
+                                                        <span>Profile</span>
+                                                    </NavLink>
+                                                </div>
+                                                <div className="dropdown-menu-item profile">
+                                                    <NavLink to={`/tickets`} className={'menu-link'}>
+                                                        <div className="icon tickets-icon"></div>
+                                                        <span>My tickets</span>
+                                                    </NavLink>
+                                                </div>
+                                                <div className="dropdown-menu-item log-out">
+                                                    <NavLink onClick={this.handleLogout} to={`/logout`}
+                                                             className={'menu-link'}>
+                                                        <div className="icon log-out-icon"></div>
+                                                        <span>Log out</span>
+                                                    </NavLink>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </>
                             }
                         </div>
                     </div>
