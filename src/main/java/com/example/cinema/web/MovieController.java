@@ -1,7 +1,6 @@
 package com.example.cinema.web;
 
-import com.example.cinema.exceptions.EntityNotFoundException;
-import com.example.cinema.model.entities.movie.Movie;
+import com.example.cinema.model.dto.MovieDto;
 import com.example.cinema.service.MovieService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -21,13 +20,12 @@ public class MovieController {
     }
 
     @PostMapping
-    public Movie saveMovie(
-            @Valid Movie movie,
+    public MovieDto saveMovie(
+            @Valid MovieDto movie,
             @RequestParam(value = "poster", required = false) MultipartFile posterImage,
             @RequestParam(value = "previews", required = false) MultipartFile[] previews
     ) {
-        movieService.saveMovie(movie, posterImage, previews);
-        return movie;
+        return movieService.saveMovie(movie, posterImage, previews);
     }
 
     @DeleteMapping("/{id}")
@@ -36,12 +34,12 @@ public class MovieController {
     }
 
     @GetMapping("/{id}")
-    public Movie getMovieById(@PathVariable long id){
-        return movieService.getMovie(id).orElseThrow(() -> new EntityNotFoundException(id, Movie.class));
+    public MovieDto getMovieById(@PathVariable long id){
+        return movieService.getMovie(id);
     }
 
     @GetMapping
-    public List<Movie> getMovies(@RequestParam(name = "name", required = false) String name){
+    public List<MovieDto> getMovies(@RequestParam(name = "name", required = false) String name){
         if(name != null) {
             return movieService.getMoviesByName(name);
         }

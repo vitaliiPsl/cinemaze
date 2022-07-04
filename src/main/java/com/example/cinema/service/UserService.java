@@ -1,73 +1,74 @@
 package com.example.cinema.service;
 
+import com.example.cinema.exceptions.EntityAlreadyExistsException;
 import com.example.cinema.exceptions.EntityNotFoundException;
+import com.example.cinema.model.dto.UserDto;
 import com.example.cinema.model.entities.Role;
 import com.example.cinema.model.entities.User;
-import com.example.cinema.persistence.RoleRepository;
 import com.example.cinema.persistence.UserRepository;
+import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@AllArgsConstructor
 public class UserService {
+    private final ModelMapper modelMapper;
+    private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-    }
+    public UserDto saveClient(UserDto userDto){
+        String email = userDto.getEmail();
+        String password = userDto.getPassword();
+        userDto.setPassword(null);
 
-    public void saveClient(User user){
-        Role role = roleRepository.findByRole("CLIENT").orElseThrow(() -> new EntityNotFoundException("CLIENT", Role.class));
-        user.addRole(role);
+        Optional<User> possibleUser = userRepository.findByEmail(email);
+        if(possibleUser.isPresent()){
+            throw new EntityAlreadyExistsException(email, User.class);
+        }
 
-        userRepository.save(user);
-    }
-
-    public void saveAdmin(User user){
-        Role role = roleRepository.findByRole("CLIENT").orElseThrow(() ->  new EntityNotFoundException("CLIENT", Role.class));
-        user.addRole(role);
-
-        role = roleRepository.findByRole("ADMIN").orElseThrow(() ->  new EntityNotFoundException("ADMIN", Role.class));
-        user.addRole(role);
+        User user = modelMapper.map(userDto, User.class);
+        user.setPassword(passwordEncoder.encode(password));
+        user.setRole(Role.CLIENT);
 
         userRepository.save(user);
-    }
 
-    public void saveRole(Role role){
-        roleRepository.save(role);
-    }
-
-    public void addRoleToUser(long userId, long roleId){
-        User user = userRepository.findById(userId).orElseThrow(() ->  new EntityNotFoundException(userId, User.class));
-        Role role = roleRepository.findById(roleId).orElseThrow(() ->  new EntityNotFoundException(roleId, Role.class));
-
-        user.addRole(role);
-        userRepository.save(user);
+        return mapUserToUserDto(user);
     }
 
     public void deleteUser(long id){
-        getUser(id).ifPresent(userRepository::delete);
+        User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, User.class));
+        userRepository.delete(user);
     }
 
-    public void deleteUser(String email){
-        getUser(email).ifPresent(userRepository::delete);
+    @Transactional(readOnly = true)
+    public UserDto getUser(long id){
+        User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, User.class));
+        return mapUserToUserDto(user);
     }
 
-    public Optional<User> getUser(long id){
-        return userRepository.findById(id);
+    @Transactional(readOnly = true)
+    public UserDto getUser(String email){
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException(email, User.class));
+        return mapUserToUserDto(user);
     }
 
-    public Optional<User> getUser(String email){
-        return userRepository.findByEmail(email);
+    @Transactional(readOnly = true)
+    public List<UserDto> getAllUsers(){
+        return userRepository.findAll()
+                .stream().map(this::mapUserToUserDto)
+                .collect(Collectors.toList());
     }
 
-    public List<User> getAllUsers(){
-        return userRepository.findAll();
+    public UserDto mapUserToUserDto(User user){
+        return modelMapper.map(user, UserDto.class);
     }
 }

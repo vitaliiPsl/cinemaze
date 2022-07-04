@@ -1,14 +1,11 @@
 package com.example.cinema.web;
 
-import com.example.cinema.exceptions.EntityAlreadyExistsException;
-import com.example.cinema.exceptions.EntityNotFoundException;
-import com.example.cinema.model.entities.movie.Genre;
+import com.example.cinema.model.dto.GenreDto;
 import com.example.cinema.service.GenreService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @CrossOrigin("*")
 @RestController
@@ -21,14 +18,8 @@ public class GenreController {
     }
 
     @PostMapping
-    public void saveGenre(@Valid @RequestBody Genre genre){
-        Optional<Genre> existing = genreService.getGenre(genre.getGenre());
-
-        if(existing.isPresent()){
-            throw new EntityAlreadyExistsException(genre.getGenre(), Genre.class);
-        }
-
-        genreService.saveGenre(genre);
+    public GenreDto saveGenre(@Valid @RequestBody GenreDto genre){
+        return genreService.saveGenre(genre);
     }
 
     @DeleteMapping("/{id}")
@@ -37,12 +28,12 @@ public class GenreController {
     }
 
     @GetMapping
-    public List<Genre> getAllGenres(){
+    public List<GenreDto> getAllGenres(){
         return genreService.getAllGenres();
     }
 
     @GetMapping("/{id}")
-    public Genre getGenre(@PathVariable(name = "id") long id){
-        return genreService.getGenre(id).orElseThrow(() -> new EntityNotFoundException(id, Genre.class));
+    public GenreDto getGenre(@PathVariable(name = "id") long id){
+        return genreService.getGenre(id);
     }
 }
