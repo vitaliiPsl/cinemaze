@@ -5,7 +5,6 @@ import com.example.cinema.model.dto.MovieDto;
 import com.example.cinema.model.entities.movie.Genre;
 import com.example.cinema.model.entities.movie.Movie;
 import com.example.cinema.persistence.GenreRepository;
-import com.example.cinema.persistence.ImageRepository;
 import com.example.cinema.persistence.MovieRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -25,21 +25,18 @@ public class MovieService {
     public final ModelMapper modelMapper;
     private final MovieRepository movieRepository;
     private final GenreRepository genreRepository;
-    private final ImageRepository imageRepository;
+    private final ImageService imageService;
 
     public MovieDto saveMovie(MovieDto movieDto, MultipartFile posterImage, MultipartFile[] previewImages) {
         log.debug("save movie {}", movieDto);
         Movie movie = modelMapper.map(movieDto, Movie.class);
 
-        String poster = imageRepository.savePosterImage(posterImage);
+        String poster = imageService.savePosterImage(posterImage);
         movie.setPosterImage(poster);
 
-        if (previewImages != null && previewImages.length != 0) {
-            for (MultipartFile previewImage : previewImages) {
-                String preview = imageRepository.savePreviewImage(previewImage);
-                movie.addPreviewImage(preview);
-            }
-        }
+        Set<String> previewsIdentifiers = imageService.savePreviewImages(previewImages);
+        movie.setPreviewImages(previewsIdentifiers);
+
         movieRepository.save(movie);
         return modelMapper.map(movie, MovieDto.class);
     }
@@ -68,18 +65,6 @@ public class MovieService {
         return movieRepository.findById(id)
                 .map(this::mapMovieToMovieDto)
                 .orElseThrow(() -> new EntityNotFoundException(id, Movie.class));
-    }
-
-    public byte[] getPosterImage(String identifier) {
-        log.debug("get poster by identifier: {}", identifier);
-
-        return imageRepository.loadPosterImage(identifier);
-    }
-
-    public byte[] getPreviewImage(String identifier) {
-        log.debug("get preview by identifier: {}", identifier);
-
-        return imageRepository.loadPreviewImage(identifier);
     }
 
     @Transactional(readOnly = true)
