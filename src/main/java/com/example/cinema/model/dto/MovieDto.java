@@ -23,7 +23,7 @@ public class MovieDto {
     @NotBlank(message = "The name of movie the is required")
     private String name;
 
-    @Size(min = 24, max = 1024, message = "You need to provide a short overview of this movie. From 24 up to 1024 characters")
+    @Size(min = 24, max = 2048, message = "You need to provide a short overview of this movie. From 24 up to 1024 characters")
     private String overview;
 
     @Min(value = 1, message = "Movie duration must be longer than 1 minute")

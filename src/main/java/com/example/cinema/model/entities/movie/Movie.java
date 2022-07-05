@@ -18,6 +18,8 @@ public class Movie {
     private long id;
     private String name;
     private String trailerUrl;
+
+    @Column(length = 2048)
     private String overview;
     private long duration;
 
