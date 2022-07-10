@@ -46,6 +46,13 @@ public class ErrorHandlerController {
         return buildResponseEntity(new ApiError(BAD_REQUEST, error, e));
     }
 
+    @ExceptionHandler(IllegalStateException.class)
+    protected ResponseEntity<ApiError> handleIllegalStateException(IllegalStateException e) {
+        log.error("handleIllegalStateException: {}", e.getMessage(), e);
+
+        return buildResponseEntity(new ApiError(BAD_REQUEST, e.getMessage(), e));
+    }
+
     @ExceptionHandler(EntityAlreadyExistsException.class)
     protected ResponseEntity<ApiError> handleEntityAlreadyExistsException(EntityAlreadyExistsException e){
         log.error("handleEntityAlreadyExistsException: {}", e.getMessage(), e);
