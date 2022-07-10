@@ -1,6 +1,7 @@
 package com.example.cinema.model.dto;
 
 import com.example.cinema.model.entities.movie.Genre;
+import com.example.cinema.model.entities.movie.MovieSession;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -39,6 +40,9 @@ public class MovieDto {
 
     @JsonIgnoreProperties("movies")
     private Set<Genre> genres = new HashSet<>();
+
+    @JsonIgnoreProperties("movie")
+    private Set<MovieSession> sessions = new HashSet<>();
 
     private Set<String> directors = new HashSet<>();
     private Set<String> actors = new HashSet<>();
