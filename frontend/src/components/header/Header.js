@@ -67,7 +67,7 @@ export default class Header extends React.Component {
 
                             {this.context.user &&
                                 <>
-                                    {this.context.user.roles.indexOf('ADMIN') !== -1 &&
+                                    {this.context.user.role === 'ADMIN' &&
                                         <div className="menu-item">
                                             <NavLink to={'/admin'} className={'menu-link'}>
                                                 <span>ADMIN</span>

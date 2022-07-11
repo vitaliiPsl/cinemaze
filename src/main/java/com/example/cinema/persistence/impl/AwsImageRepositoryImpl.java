@@ -1,4 +1,4 @@
-package com.example.cinema.persistence;
+package com.example.cinema.persistence.impl;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
@@ -11,6 +11,7 @@ import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.example.cinema.exceptions.LoadImageException;
 import com.example.cinema.exceptions.SaveImageException;
 import com.example.cinema.exceptions.UnsupportedImageTypeException;
+import com.example.cinema.persistence.ImageRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;

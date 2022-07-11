@@ -2,6 +2,7 @@ package com.example.cinema.model.entities.movie;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -16,13 +17,19 @@ public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     private String name;
+
     private String trailerUrl;
+
+    @Column(length = 2048)
     private String overview;
+
     private long duration;
 
     @JsonIgnoreProperties("movies")
     @ManyToMany(fetch = FetchType.EAGER)
+    @ToString.Exclude
     private Set<Genre> genres = new HashSet<>();
 
     @ElementCollection(fetch = FetchType.EAGER)
@@ -32,15 +39,16 @@ public class Movie {
     private Set<String> actors = new HashSet<>();
 
     private String posterImage;
+
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<String> previewImages = new HashSet<>();
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate releaseDate;
 
-    public void addPreviewImage(String preview){
-        previewImages.add(preview);
-    }
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.REMOVE)
+    @ToString.Exclude
+    private Set<MovieSession> sessions = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {

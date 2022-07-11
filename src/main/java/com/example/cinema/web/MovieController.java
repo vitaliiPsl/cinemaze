@@ -1,7 +1,9 @@
 package com.example.cinema.web;
 
 import com.example.cinema.model.dto.MovieDto;
+import com.example.cinema.service.ImageService;
 import com.example.cinema.service.MovieService;
+import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -9,15 +11,13 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.util.List;
 
-@CrossOrigin("*")
 @RestController
 @RequestMapping("/api/movies")
+@AllArgsConstructor
 public class MovieController {
     private final MovieService movieService;
+    private final ImageService imageService;
 
-    public MovieController(MovieService movieService) {
-        this.movieService = movieService;
-    }
 
     @PostMapping
     public MovieDto saveMovie(
@@ -49,12 +49,12 @@ public class MovieController {
 
     @GetMapping(value = "/poster/{poster}", produces = MediaType.IMAGE_JPEG_VALUE)
     public byte[] getPosterImage(@PathVariable(name = "poster") String poster){
-        return movieService.getPosterImage(poster);
+        return imageService.getPosterImage(poster);
     }
 
     @GetMapping(value = "/preview/{preview}", produces = MediaType.IMAGE_JPEG_VALUE)
     public byte[] getPreviewImage(@PathVariable(name = "preview") String preview){
-        return movieService.getPreviewImage(preview);
+        return imageService.getPreviewImage(preview);
     }
 
     @PutMapping("/{movieId}/genres/{genreId}")

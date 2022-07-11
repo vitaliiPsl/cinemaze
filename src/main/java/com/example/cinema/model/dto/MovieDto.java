@@ -1,6 +1,7 @@
 package com.example.cinema.model.dto;
 
 import com.example.cinema.model.entities.movie.Genre;
+import com.example.cinema.model.entities.movie.MovieSession;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,7 +24,7 @@ public class MovieDto {
     @NotBlank(message = "The name of movie the is required")
     private String name;
 
-    @Size(min = 24, max = 1024, message = "You need to provide a short overview of this movie. From 24 up to 1024 characters")
+    @Size(min = 24, max = 2048, message = "You need to provide a short overview of this movie. From 24 up to 1024 characters")
     private String overview;
 
     @Min(value = 1, message = "Movie duration must be longer than 1 minute")
@@ -39,6 +40,9 @@ public class MovieDto {
 
     @JsonIgnoreProperties("movies")
     private Set<Genre> genres = new HashSet<>();
+
+    @JsonIgnoreProperties("movie")
+    private Set<MovieSession> sessions = new HashSet<>();
 
     private Set<String> directors = new HashSet<>();
     private Set<String> actors = new HashSet<>();
