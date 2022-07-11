@@ -10,7 +10,6 @@ import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
 
-@CrossOrigin("*")
 @AllArgsConstructor
 @RestController
 @RequestMapping("api/movie-sessions")
