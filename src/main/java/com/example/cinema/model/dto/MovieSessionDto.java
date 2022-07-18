@@ -10,9 +10,11 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Objects;
 
 @Data
 public class MovieSessionDto {
+
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private long id;
 
@@ -42,4 +44,17 @@ public class MovieSessionDto {
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalTime endsAt;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MovieSessionDto that = (MovieSessionDto) o;
+        return movieId == that.movieId && movieHallId == that.movieHallId && Objects.equals(date, that.date) && Objects.equals(startsAt, that.startsAt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(movieId, movieHallId, date, startsAt);
+    }
 }
