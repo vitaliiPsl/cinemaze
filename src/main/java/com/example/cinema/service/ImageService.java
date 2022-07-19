@@ -6,9 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashSet;
-import java.util.Set;
-
 @Slf4j
 @AllArgsConstructor
 @Service
@@ -27,29 +24,25 @@ public class ImageService {
         return imageRepository.loadPreviewImage(identifier);
     }
 
-    public String savePosterImage(MultipartFile posterImage){
-        log.debug("save poster image: {}", posterImage.getOriginalFilename());
+    public String savePosterImage(MultipartFile posterImage) {
+        log.debug("save poster image: {}", posterImage);
+
+        if (posterImage == null) {
+            log.error("Poster image is null");
+            throw new IllegalStateException("Poster images cannot be equal null");
+        }
 
         return imageRepository.savePosterImage(posterImage);
     }
 
-    public String savePreviewImage(MultipartFile previewImage){
-        log.debug("save preview image: {}", previewImage.getOriginalFilename());
+    public String savePreviewImage(MultipartFile previewImage) {
+        log.debug("save preview image: {}", previewImage);
+
+        if (previewImage == null) {
+            log.error("Preview image is null");
+            throw new IllegalStateException("Preview images cannot be equal null");
+        }
 
         return imageRepository.savePreviewImage(previewImage);
-    }
-
-    public Set<String> savePreviewImages(MultipartFile[] previewImages){
-        Set<String> previewsIdentifiers = new HashSet<>();
-        if (previewImages == null || previewImages.length == 0) {
-            return previewsIdentifiers;
-        }
-
-        for (MultipartFile previewImage : previewImages) {
-            String preview = savePreviewImage(previewImage);
-            previewsIdentifiers.add(preview);
-        }
-
-        return previewsIdentifiers;
     }
 }

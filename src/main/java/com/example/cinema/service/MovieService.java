@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -31,10 +32,14 @@ public class MovieService {
         log.debug("save movie {}", movieDto);
         Movie movie = modelMapper.map(movieDto, Movie.class);
 
-        String poster = imageService.savePosterImage(posterImage);
-        movie.setPosterImage(poster);
+        log.debug("poster image: {}", posterImage);
+        if (posterImage != null) {
+            String poster = imageService.savePosterImage(posterImage);
+            movie.setPosterImage(poster);
+        }
 
-        Set<String> previewsIdentifiers = imageService.savePreviewImages(previewImages);
+        log.debug("preview images: {}", previewImages);
+        Set<String> previewsIdentifiers = savePreviewImages(previewImages);
         movie.setPreviewImages(previewsIdentifiers);
 
         movieRepository.save(movie);
@@ -105,5 +110,20 @@ public class MovieService {
 
     public MovieDto mapMovieToMovieDto(Movie movie) {
         return modelMapper.map(movie, MovieDto.class);
+    }
+
+    private Set<String> savePreviewImages(MultipartFile[] previewImages) {
+        Set<String> previewsIdentifiers = new HashSet<>();
+
+        if (previewImages == null || previewImages.length == 0) {
+            return previewsIdentifiers;
+        }
+
+        for (MultipartFile previewImage : previewImages) {
+            String preview = imageService.savePreviewImage(previewImage);
+            previewsIdentifiers.add(preview);
+        }
+
+        return previewsIdentifiers;
     }
 }
