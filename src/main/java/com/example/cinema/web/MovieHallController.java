@@ -21,11 +21,6 @@ public class MovieHallController {
         return movieHallService.saveMovieHall(movieHallDto);
     }
 
-    @PutMapping("{id}")
-    public MovieHallDto updateMovieHall(@PathVariable long id, @Valid @RequestBody MovieHallDto movieHallDto){
-        return movieHallService.updateMovieHall(id, movieHallDto);
-    }
-
     @GetMapping
     public List<MovieHallDto> getAll(){
         return movieHallService.getAll();
