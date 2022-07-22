@@ -2,15 +2,20 @@ package com.example.cinema.model.entities.movie;
 
 
 import com.example.cinema.config.jpa.converters.LocalTimeConverter;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
+@Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -30,6 +35,7 @@ public class MovieSession {
     @Convert(converter = LocalTimeConverter.class)
     private LocalTime endsAt;
 
+    @JsonIgnoreProperties("sessions")
     @ManyToOne(optional = false)
     private Movie movie;
 

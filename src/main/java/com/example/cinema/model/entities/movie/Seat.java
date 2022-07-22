@@ -1,11 +1,15 @@
 package com.example.cinema.model.entities.movie;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Objects;
 
+@Builder
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Seat {
     @Id
@@ -15,6 +19,8 @@ public class Seat {
     private int row;
     private int number;
 
+    @ToString.Exclude
+    @JsonIgnore
     @ManyToOne
     private MovieHall movieHall;
 

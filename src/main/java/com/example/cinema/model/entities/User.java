@@ -1,12 +1,18 @@
 package com.example.cinema.model.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Objects;
 
+@Builder
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "person")
 public class User {

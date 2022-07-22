@@ -1,8 +1,7 @@
 package com.example.cinema.model.entities.movie;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -11,8 +10,12 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+@Builder
 @Data
-@Entity @Table(name = "movie")
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "movie")
 public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
