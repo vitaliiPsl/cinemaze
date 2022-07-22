@@ -1,36 +1,32 @@
 package com.example.cinema.service;
 
 import com.example.cinema.exceptions.EntityNotFoundException;
-import com.example.cinema.model.dto.MovieDto;
 import com.example.cinema.model.entities.movie.Genre;
 import com.example.cinema.model.entities.movie.Movie;
 import com.example.cinema.persistence.GenreRepository;
 import com.example.cinema.persistence.MovieRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Slf4j
 @AllArgsConstructor
 @Service
 @Transactional
 public class MovieService {
-    public final ModelMapper modelMapper;
     private final MovieRepository movieRepository;
     private final GenreRepository genreRepository;
     private final ImageService imageService;
 
-    public MovieDto saveMovie(MovieDto movieDto, MultipartFile posterImage, MultipartFile[] previewImages) {
-        log.debug("save movie {}", movieDto);
-        Movie movie = modelMapper.map(movieDto, Movie.class);
+    public Movie saveMovie(Movie movie, MultipartFile posterImage, MultipartFile[] previewImages) {
+        log.debug("save movie {}", movie);
 
         log.debug("poster image: {}", posterImage);
         if (posterImage != null) {
@@ -38,56 +34,48 @@ public class MovieService {
             movie.setPosterImage(poster);
         }
 
-        log.debug("preview images: {}", previewImages);
+        log.debug("preview images: {}", Arrays.toString(previewImages));
         Set<String> previewsIdentifiers = savePreviewImages(previewImages);
         movie.setPreviewImages(previewsIdentifiers);
 
-        movieRepository.save(movie);
-        return modelMapper.map(movie, MovieDto.class);
+        return movieRepository.save(movie);
     }
 
-    public void updateMovie(long id, MovieDto movieDto) {
-        log.debug("update movie with id {}: {}", id, movieDto);
+    public Movie updateMovie(long id, Movie movie) {
+        log.debug("update movie with id {}: {}", id, movie);
         movieRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, Movie.class));
 
-        Movie movie = modelMapper.map(movieDto, Movie.class);
         movie.setId(id);
-
-        movieRepository.save(movie);
+        return movieRepository.save(movie);
     }
 
     public void deleteMovie(long id) {
         log.debug("delete movie by id: {}", id);
 
         Movie movie = movieRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, Movie.class));
+
         movieRepository.delete(movie);
     }
 
     @Transactional(readOnly = true)
-    public MovieDto getMovie(long id) {
+    public Movie getMovie(long id) {
         log.debug("get movie by id: {}", id);
 
-        return movieRepository.findById(id)
-                .map(this::mapMovieToMovieDto)
-                .orElseThrow(() -> new EntityNotFoundException(id, Movie.class));
+        return movieRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, Movie.class));
     }
 
     @Transactional(readOnly = true)
-    public List<MovieDto> getMoviesByName(String name) {
+    public List<Movie> getMoviesByName(String name) {
         log.debug("get movie by name: {}", name);
 
-        return movieRepository.findByNameContainingIgnoreCase(name)
-                .stream().map(this::mapMovieToMovieDto)
-                .collect(Collectors.toList());
+        return movieRepository.findByNameContainingIgnoreCase(name);
     }
 
     @Transactional(readOnly = true)
-    public List<MovieDto> getAllMovies() {
+    public List<Movie> getAllMovies() {
         log.debug("get all movies");
 
-        return movieRepository.findAll()
-                .stream().map(this::mapMovieToMovieDto)
-                .collect(Collectors.toList());
+        return movieRepository.findAll();
     }
 
     public void addGenreToMovie(long movieId, long genreId) {
@@ -106,10 +94,6 @@ public class MovieService {
         Genre genre = genreRepository.findById(genreId).orElseThrow(() -> new EntityNotFoundException(genreId, Genre.class));
 
         movie.getGenres().remove(genre);
-    }
-
-    public MovieDto mapMovieToMovieDto(Movie movie) {
-        return modelMapper.map(movie, MovieDto.class);
     }
 
     private Set<String> savePreviewImages(MultipartFile[] previewImages) {

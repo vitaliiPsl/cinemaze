@@ -1,7 +1,6 @@
 package com.example.cinema.service;
 
 import com.example.cinema.exceptions.EntityNotFoundException;
-import com.example.cinema.model.dto.MovieDto;
 import com.example.cinema.model.entities.movie.Genre;
 import com.example.cinema.model.entities.movie.Movie;
 import com.example.cinema.persistence.GenreRepository;
@@ -13,10 +12,10 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.modelmapper.ModelMapper;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,15 +23,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class MovieServiceTest {
-
-    @Mock
-    ModelMapper modelMapper;
-
     @Mock
     MovieRepository movieRepository;
 
@@ -49,7 +43,6 @@ class MovieServiceTest {
     void testSaveMovie() {
         // given
         String movieName = "Test";
-        MovieDto movieDto = getMovieDto(movieName);
         Movie movie = getMovie(0, movieName);
 
         MultipartFile poster = new MockMultipartFile("poster", new byte[]{});
@@ -62,21 +55,18 @@ class MovieServiceTest {
         for (var preview : previews) {
             when(imageService.savePreviewImage(preview)).thenReturn(preview.getName());
         }
-
         when(imageService.savePosterImage(poster)).thenReturn(poster.getName());
-        when(modelMapper.map(movieDto, Movie.class)).thenReturn(movie);
-        when(modelMapper.map(movie, MovieDto.class)).thenReturn(getMovieDto(movieName));
 
-        MovieDto result = movieService.saveMovie(movieDto, poster, previews);
+        when(movieRepository.save(movie)).thenReturn(movie);
+        Movie result = movieService.saveMovie(movie, poster, previews);
 
         // then
-        verify(modelMapper).map(movieDto, Movie.class);
         verify(movieRepository).save(movie);
         verify(imageService).savePosterImage(poster);
         verify(imageService, times(previews.length)).savePreviewImage(ArgumentMatchers.any(MultipartFile.class));
 
-        assertThat(movie.getPosterImage(), notNullValue());
-        assertThat(movie.getPreviewImages(), hasSize(previews.length));
+        assertThat(result.getPosterImage(), notNullValue());
+        assertThat(result.getPreviewImages(), hasSize(previews.length));
         assertThat(result.getName(), equalTo(movieName));
     }
 
@@ -84,18 +74,15 @@ class MovieServiceTest {
     void testSaveMovieDoesntSavePosterIfNull() {
         // given
         String movieName = "Test";
-        MovieDto movieDto = getMovieDto(movieName);
         Movie movie = getMovie(0, movieName);
 
         MultipartFile poster = null;
         MultipartFile[] previews = {};
 
         // when
-        when(modelMapper.map(movieDto, Movie.class)).thenReturn(movie);
-        movieService.saveMovie(movieDto, poster, previews);
+        movieService.saveMovie(movie, poster, previews);
 
         // then
-        verify(modelMapper).map(movieDto, Movie.class);
         verify(imageService, never()).savePosterImage(ArgumentMatchers.any(MultipartFile.class));
     }
 
@@ -103,7 +90,6 @@ class MovieServiceTest {
     void testSaveMovieDoesntSavePreviewsIfNull() {
         // given
         String movieName = "Test";
-        MovieDto movieDto = getMovieDto(movieName);
         Movie movie = getMovie(0, movieName);
 
         MultipartFile poster = new MockMultipartFile("poster", new byte[]{});
@@ -111,19 +97,17 @@ class MovieServiceTest {
 
         // when
         when(imageService.savePosterImage(poster)).thenReturn(poster.getName());
-        when(modelMapper.map(movieDto, Movie.class)).thenReturn(movie);
-        when(modelMapper.map(movie, MovieDto.class)).thenReturn(getMovieDto(movieName));
+        when(movieRepository.save(movie)).thenReturn(movie);
 
-        MovieDto result = movieService.saveMovie(movieDto, poster, previews);
+        Movie result = movieService.saveMovie(movie, poster, previews);
 
         // then
-        verify(modelMapper).map(movieDto, Movie.class);
         verify(movieRepository).save(movie);
         verify(imageService).savePosterImage(poster);
         verify(imageService, never()).savePreviewImage(ArgumentMatchers.any(MultipartFile.class));
 
-        assertThat(movie.getPosterImage(), notNullValue());
-        assertThat(movie.getPreviewImages(), hasSize(0));
+        assertThat(result.getPosterImage(), notNullValue());
+        assertThat(result.getPreviewImages(), hasSize(0));
         assertThat(result.getName(), equalTo(movieName));
     }
 
@@ -136,6 +120,7 @@ class MovieServiceTest {
 
         // when
         when(movieRepository.findById(id)).thenReturn(Optional.of(movie));
+
         movieService.deleteMovie(id);
 
         // then
@@ -160,19 +145,19 @@ class MovieServiceTest {
         // given
         long id = 1;
         String movieName = "test";
-        MovieDto movieDto = getMovieDto(movieName);
         Movie movie = getMovie(0, movieName);
 
         // when
         when(movieRepository.findById(id)).thenReturn(Optional.of(getMovie(id, movieName)));
-        when(modelMapper.map(movieDto, Movie.class)).thenReturn(movie);
-        movieService.updateMovie(id, movieDto);
+        when(movieRepository.save(movie)).thenReturn(movie);
+
+        Movie result = movieService.updateMovie(id, movie);
 
         // then
         verify(movieRepository).findById(id);
-        verify(modelMapper).map(movieDto, Movie.class);
         verify(movieRepository).save(movie);
-        assertThat(movie.getId(), equalTo(id));
+        assertThat(result.getId(), equalTo(id));
+        assertThat(result.getName(), is(movieName));
     }
 
     @Test
@@ -180,13 +165,13 @@ class MovieServiceTest {
         // given
         long id = 1;
         String movieName = "test";
-        MovieDto movieDto = getMovieDto(movieName);
+        Movie movie = getMovie(id, movieName);
 
         // when
         when(movieRepository.findById(id)).thenReturn(Optional.empty());
 
         // then
-        assertThrows(EntityNotFoundException.class, () -> movieService.updateMovie(id, movieDto));
+        assertThrows(EntityNotFoundException.class, () -> movieService.updateMovie(id, movie));
     }
 
     @Test
@@ -195,16 +180,13 @@ class MovieServiceTest {
         long id = 1;
         String movieName = "test";
         Movie movie = getMovie(id, movieName);
-        MovieDto movieDto = getMovieDto(movieName);
 
         // when
         when(movieRepository.findById(id)).thenReturn(Optional.of(movie));
-        when(modelMapper.map(movie, MovieDto.class)).thenReturn(movieDto);
-        MovieDto result = movieService.getMovie(id);
+        Movie result = movieService.getMovie(id);
 
         // then
         verify(movieRepository).findById(id);
-        verify(modelMapper).map(movie, MovieDto.class);
         assertThat(result.getName(), equalTo(movieName));
     }
 
@@ -228,14 +210,10 @@ class MovieServiceTest {
 
         // when
         when(movieRepository.findByNameContainingIgnoreCase(movieName)).thenReturn(movies);
-        for (var movie : movies) {
-            when(modelMapper.map(movie, MovieDto.class)).thenReturn(getMovieDto(movie.getName()));
-        }
-        List<MovieDto> resultList = movieService.getMoviesByName(movieName);
+        List<Movie> resultList = movieService.getMoviesByName(movieName);
 
         //then
         verify(movieRepository).findByNameContainingIgnoreCase(movieName);
-        verify(modelMapper, times(movies.size())).map(ArgumentMatchers.any(Movie.class), eq(MovieDto.class));
         assertThat(resultList, hasSize(movies.size()));
     }
 
@@ -246,14 +224,10 @@ class MovieServiceTest {
 
         // when
         when(movieRepository.findAll()).thenReturn(movies);
-        for (var movie : movies) {
-            when(modelMapper.map(movie, MovieDto.class)).thenReturn(getMovieDto(movie.getName()));
-        }
-        List<MovieDto> resultList = movieService.getAllMovies();
+        List<Movie> resultList = movieService.getAllMovies();
 
         //then
         verify(movieRepository).findAll();
-        verify(modelMapper, times(movies.size())).map(ArgumentMatchers.any(Movie.class), eq(MovieDto.class));
         assertThat(resultList, hasSize(movies.size()));
     }
 
@@ -352,42 +326,18 @@ class MovieServiceTest {
         assertThrows(EntityNotFoundException.class, () -> movieService.removeGenreFromMovie(movieId, genreId));
     }
 
-    @Test
-    void mapMovieToMovieDto() {
-        // given
-        String movieName = "test";
-        Movie movie = getMovie(0, movieName);
-        MovieDto movieDto = getMovieDto(movieName);
-
-        // when
-        when(modelMapper.map(movie, MovieDto.class)).thenReturn(movieDto);
-        MovieDto result = movieService.mapMovieToMovieDto(movie);
-
-        // then
-        verify(modelMapper).map(movie, MovieDto.class);
-        assertThat(result.getName(), equalTo(movieName));
-    }
-
     private Movie getMovie(long id, String name) {
-        Movie movie = new Movie();
-        movie.setId(id);
-        movie.setName(name);
-
-        return movie;
-    }
-
-    private MovieDto getMovieDto(String name) {
-        MovieDto movieDto = new MovieDto();
-        movieDto.setName(name);
-
-        return movieDto;
+        return Movie.builder()
+                .id(id)
+                .name(name)
+                .genres(new HashSet<>())
+                .build();
     }
 
     private Genre getGenre(long id, String genreName) {
-        Genre genre = new Genre();
-        genre.setId(id);
-        genre.setGenre(genreName);
-
-        return genre;
+        return Genre.builder()
+                .id(id)
+                .genre(genreName)
+                .build();
     }
 }
