@@ -8,9 +8,10 @@ import lombok.Data;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Data
 public class MovieSessionDto {
@@ -33,7 +34,13 @@ public class MovieSessionDto {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private MovieHall movieHall;
 
-    @Min(0)
+    @NotNull(message = "You have to provide the time of the session beginning")
+    private LocalDateTime startsAt;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private LocalDateTime endsAt;
+
+    @Min(value = 0, message = "Session price cannot be negative")
     private double price;
 
     @NotNull(message = "You have to provide the date of movie session")
@@ -50,11 +57,11 @@ public class MovieSessionDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MovieSessionDto that = (MovieSessionDto) o;
-        return movieId == that.movieId && movieHallId == that.movieHallId && Objects.equals(date, that.date) && Objects.equals(startsAt, that.startsAt);
+        return movieId == that.movieId && movieHallId == that.movieHallId && Objects.equals(startsAt, that.startsAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(movieId, movieHallId, date, startsAt);
+        return Objects.hash(movieId, movieHallId, startsAt);
     }
 }

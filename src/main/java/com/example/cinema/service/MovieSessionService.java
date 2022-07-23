@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -29,17 +29,15 @@ public class MovieSessionService {
         log.debug("Save movieSession: {}", movieSession);
 
         Movie movie = movieRepository.findById(movieId).orElseThrow(() -> new EntityNotFoundException(movieId, Movie.class));
-
         movieSession.setMovie(movie);
 
-        LocalTime endsAt = movieSession.getStartsAt().plusMinutes(movie.getDuration());
+        LocalDateTime endsAt = movieSession.getStartsAt().plusMinutes(movie.getDuration());
         movieSession.setEndsAt(endsAt);
 
         MovieHall movieHall = movieHallRepository.findById(movieHallId).orElseThrow(() -> new EntityNotFoundException(movieHallId, MovieHall.class));
 
         // check if hall is available at provided time
-        boolean isMovieHallAvailable =
-                checkMovieHallAvailability(movieHall, movieSession.getDate(), movieSession.getStartsAt(), endsAt);
+        boolean isMovieHallAvailable = checkMovieHallAvailability(movieHall, movieSession.getStartsAt(), movieSession.getEndsAt());
         if (!isMovieHallAvailable) {
             throw new IllegalStateException("There is another movie at hall " + movieHallId + " at that time");
         }
@@ -64,7 +62,7 @@ public class MovieSessionService {
     public List<MovieSession> getAvailableByMovie(long movieId) {
         Movie movie = movieRepository.findById(movieId).orElseThrow(() -> new EntityNotFoundException(movieId, Movie.class));
 
-        return movieSessionRepository.findAvailableByMovie(movie);
+        return movieSessionRepository.findAvailableByMovie(movie.getId());
     }
 
     @Transactional(readOnly = true)
@@ -81,14 +79,14 @@ public class MovieSessionService {
     public List<MovieSession> getByMovieAndDate(long movieId, LocalDate date) {
         Movie movie = movieRepository.findById(movieId).orElseThrow(() -> new EntityNotFoundException(movieId, Movie.class));
 
-        return movieSessionRepository.findByMovieAndDate(movie, date);
+        return movieSessionRepository.findByMovieAndDate(movie.getId(), date);
     }
 
     @Transactional(readOnly = true)
     public List<MovieSession> getAvailableByMovieAndDate(long movieId, LocalDate date) {
         Movie movie = movieRepository.findById(movieId).orElseThrow(() -> new EntityNotFoundException(movieId, Movie.class));
 
-        return movieSessionRepository.findAvailableByMovieAndDate(movie, date);
+        return movieSessionRepository.findAvailableByMovieAndDate(movie.getId(), date);
     }
 
     @Transactional(readOnly = true)
@@ -101,8 +99,8 @@ public class MovieSessionService {
         return movieSessionRepository.findAll();
     }
 
-    private boolean checkMovieHallAvailability(MovieHall movieHall, LocalDate date, LocalTime startsAt, LocalTime endsAt) {
-        List<MovieSession> movieSessionList = movieSessionRepository.findByMovieHallAndDate(movieHall, date);
+    private boolean checkMovieHallAvailability(MovieHall movieHall, LocalDateTime startsAt, LocalDateTime endsAt) {
+        List<MovieSession> movieSessionList = movieSessionRepository.findByMovieHallAndDate(movieHall.getId(), startsAt.toLocalDate());
 
         for (var movieSession : movieSessionList) {
             if (checkStartsDuringAnotherSession(startsAt, movieSession) || checkEndsDuringAnotherSession(endsAt, movieSession)) {
@@ -113,11 +111,11 @@ public class MovieSessionService {
         return true;
     }
 
-    private boolean checkStartsDuringAnotherSession(LocalTime startsAt, MovieSession movieSession) {
+    private boolean checkStartsDuringAnotherSession(LocalDateTime startsAt, MovieSession movieSession) {
         return !startsAt.isBefore(movieSession.getStartsAt()) && !startsAt.isAfter(movieSession.getEndsAt());
     }
 
-    private boolean checkEndsDuringAnotherSession(LocalTime endsAt, MovieSession movieSession) {
+    private boolean checkEndsDuringAnotherSession(LocalDateTime endsAt, MovieSession movieSession) {
         return !endsAt.isBefore(movieSession.getStartsAt()) && !endsAt.isAfter(movieSession.getEndsAt());
     }
 }
