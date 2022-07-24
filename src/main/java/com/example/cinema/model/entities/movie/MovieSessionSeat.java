@@ -1,10 +1,8 @@
 package com.example.cinema.model.entities.movie;
 
+import com.example.cinema.model.entities.booking.Booking;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -25,9 +23,15 @@ public class MovieSessionSeat {
     @ManyToOne
     private Seat hallSeat;
 
+    @ToString.Exclude
     @JsonIgnore
     @ManyToOne
     private MovieSession movieSession;
+
+    @ToString.Exclude
+    @JsonIgnore
+    @ManyToOne
+    private Booking booking;
 
     public MovieSessionSeat(MovieSession movieSession, Seat seat) {
         this.movieSession = movieSession;
