@@ -3,7 +3,6 @@ package com.example.cinema.service;
 import com.example.cinema.exceptions.EntityNotFoundException;
 import com.example.cinema.model.entities.movie.Genre;
 import com.example.cinema.model.entities.movie.Movie;
-import com.example.cinema.persistence.GenreRepository;
 import com.example.cinema.persistence.MovieRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +21,8 @@ import java.util.Set;
 @Transactional
 public class MovieService {
     private final MovieRepository movieRepository;
-    private final GenreRepository genreRepository;
+
+    private final GenreService genreService;
     private final ImageService imageService;
 
     public Movie saveMovie(Movie movie, MultipartFile posterImage, MultipartFile[] previewImages) {
@@ -52,7 +52,7 @@ public class MovieService {
     public void deleteMovie(long id) {
         log.debug("delete movie by id: {}", id);
 
-        Movie movie = movieRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, Movie.class));
+        Movie movie = getMovie(id);
 
         movieRepository.delete(movie);
     }
@@ -81,8 +81,8 @@ public class MovieService {
     public void addGenreToMovie(long movieId, long genreId) {
         log.debug("add genre {} to movie {}", movieId, genreId);
 
-        Movie movie = movieRepository.findById(movieId).orElseThrow(() -> new EntityNotFoundException(movieId, Movie.class));
-        Genre genre = genreRepository.findById(genreId).orElseThrow(() -> new EntityNotFoundException(genreId, Genre.class));
+        Movie movie = getMovie(movieId);
+        Genre genre = genreService.getGenre(genreId);
 
         movie.getGenres().add(genre);
     }
@@ -90,8 +90,8 @@ public class MovieService {
     public void removeGenreFromMovie(long movieId, long genreId) {
         log.debug("remove genre {} from movie {}", movieId, genreId);
 
-        Movie movie = movieRepository.findById(movieId).orElseThrow(() -> new EntityNotFoundException(movieId, Movie.class));
-        Genre genre = genreRepository.findById(genreId).orElseThrow(() -> new EntityNotFoundException(genreId, Genre.class));
+        Movie movie = getMovie(movieId);
+        Genre genre = genreService.getGenre(genreId);
 
         movie.getGenres().remove(genre);
     }

@@ -3,7 +3,6 @@ package com.example.cinema.service;
 import com.example.cinema.exceptions.EntityNotFoundException;
 import com.example.cinema.model.entities.movie.Genre;
 import com.example.cinema.model.entities.movie.Movie;
-import com.example.cinema.persistence.GenreRepository;
 import com.example.cinema.persistence.MovieRepository;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -31,7 +30,7 @@ class MovieServiceTest {
     MovieRepository movieRepository;
 
     @Mock
-    GenreRepository genreRepository;
+    GenreService genreService;
 
     @Mock
     ImageService imageService;
@@ -126,18 +125,6 @@ class MovieServiceTest {
         // then
         verify(movieRepository).findById(id);
         verify(movieRepository).delete(movie);
-    }
-
-    @Test
-    void testDeleteMovieThrowsExceptionWhenMovieNotFound() {
-        // given
-        long id = 1;
-
-        // when
-        when(movieRepository.findById(id)).thenReturn(Optional.empty());
-
-        // then
-        assertThrows(EntityNotFoundException.class, () -> movieService.deleteMovie(id));
     }
 
     @Test
@@ -241,41 +228,13 @@ class MovieServiceTest {
 
         // when
         when(movieRepository.findById(movieId)).thenReturn(Optional.of(movie));
-        when(genreRepository.findById(genreId)).thenReturn(Optional.of(genre));
+        when(genreService.getGenre(genreId)).thenReturn(genre);
         movieService.addGenreToMovie(movieId, genreId);
 
         // then
         verify(movieRepository).findById(movieId);
-        verify(genreRepository).findById(genreId);
+        verify(genreService).getGenre(genreId);
         assertThat(movie.getGenres(), Matchers.contains(genre));
-    }
-
-    @Test
-    void testAddGenreToMovieThrowsExceptionWhenMovieNotFound() {
-        // given
-        long movieId = 1;
-        long genreId = 2;
-
-        // when
-        when(movieRepository.findById(movieId)).thenReturn(Optional.empty());
-
-        // then
-        assertThrows(EntityNotFoundException.class, () -> movieService.removeGenreFromMovie(movieId, genreId));
-    }
-
-    @Test
-    void testAddGenreToMovieThrowsExceptionWhenGenreNotFound() {
-        // given
-        long movieId = 1;
-        long genreId = 2;
-        Movie movie = getMovie(movieId, "test");
-
-        // when
-        when(movieRepository.findById(movieId)).thenReturn(Optional.of(movie));
-        when(genreRepository.findById(genreId)).thenReturn(Optional.empty());
-
-        // then
-        assertThrows(EntityNotFoundException.class, () -> movieService.addGenreToMovie(movieId, genreId));
     }
 
     @Test
@@ -289,41 +248,13 @@ class MovieServiceTest {
 
         // when
         when(movieRepository.findById(movieId)).thenReturn(Optional.of(movie));
-        when(genreRepository.findById(genreId)).thenReturn(Optional.of(genre));
+        when(genreService.getGenre(genreId)).thenReturn(genre);
         movieService.removeGenreFromMovie(movieId, genreId);
 
         // then
         verify(movieRepository).findById(movieId);
-        verify(genreRepository).findById(genreId);
+        verify(genreService).getGenre(genreId);
         assertFalse(movie.getGenres().contains(genre));
-    }
-
-    @Test
-    void testRemoveGenreFromMovieThrowsExceptionWhenMovieNotFound() {
-        // given
-        long movieId = 1;
-        long genreId = 2;
-
-        // when
-        when(movieRepository.findById(movieId)).thenReturn(Optional.empty());
-
-        // then
-        assertThrows(EntityNotFoundException.class, () -> movieService.removeGenreFromMovie(movieId, genreId));
-    }
-
-    @Test
-    void testRemoveGenreFromMovieThrowsExceptionWhenGenreNotFound() {
-        // given
-        long movieId = 1;
-        long genreId = 2;
-        Movie movie = getMovie(movieId, "test");
-
-        // when
-        when(movieRepository.findById(movieId)).thenReturn(Optional.of(movie));
-        when(genreRepository.findById(genreId)).thenReturn(Optional.empty());
-
-        // then
-        assertThrows(EntityNotFoundException.class, () -> movieService.removeGenreFromMovie(movieId, genreId));
     }
 
     private Movie getMovie(long id, String name) {

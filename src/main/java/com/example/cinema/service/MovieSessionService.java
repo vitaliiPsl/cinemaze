@@ -4,8 +4,6 @@ import com.example.cinema.exceptions.EntityNotFoundException;
 import com.example.cinema.model.entities.movie.Movie;
 import com.example.cinema.model.entities.movie.MovieHall;
 import com.example.cinema.model.entities.movie.MovieSession;
-import com.example.cinema.persistence.MovieHallRepository;
-import com.example.cinema.persistence.MovieRepository;
 import com.example.cinema.persistence.MovieSessionRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,19 +20,19 @@ import java.util.List;
 @Transactional
 public class MovieSessionService {
     private MovieSessionRepository movieSessionRepository;
-    private MovieRepository movieRepository;
-    private MovieHallRepository movieHallRepository;
+    private MovieService movieService;
+    private MovieHallService movieHallService;
 
     public MovieSession saveMovieSession(MovieSession movieSession, long movieId, long movieHallId) {
         log.debug("Save movieSession: {}", movieSession);
 
-        Movie movie = movieRepository.findById(movieId).orElseThrow(() -> new EntityNotFoundException(movieId, Movie.class));
+        Movie movie = movieService.getMovie(movieId);
         movieSession.setMovie(movie);
 
         LocalDateTime endsAt = movieSession.getStartsAt().plusMinutes(movie.getDuration());
         movieSession.setEndsAt(endsAt);
 
-        MovieHall movieHall = movieHallRepository.findById(movieHallId).orElseThrow(() -> new EntityNotFoundException(movieHallId, MovieHall.class));
+        MovieHall movieHall = movieHallService.getMovieHall(movieHallId);
 
         // check if hall is available at provided time
         boolean isMovieHallAvailable = checkMovieHallAvailability(movieHall, movieSession.getStartsAt(), movieSession.getEndsAt());
@@ -47,20 +45,20 @@ public class MovieSessionService {
     }
 
     @Transactional(readOnly = true)
-    public MovieSession getById(long id) {
+    public MovieSession getMovieSession(long id) {
         return movieSessionRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, MovieSession.class));
     }
 
     @Transactional(readOnly = true)
     public List<MovieSession> getByMovie(long movieId) {
-        Movie movie = movieRepository.findById(movieId).orElseThrow(() -> new EntityNotFoundException(movieId, Movie.class));
+        Movie movie = movieService.getMovie(movieId);
 
         return movieSessionRepository.findByMovie(movie);
     }
 
     @Transactional(readOnly = true)
     public List<MovieSession> getAvailableByMovie(long movieId) {
-        Movie movie = movieRepository.findById(movieId).orElseThrow(() -> new EntityNotFoundException(movieId, Movie.class));
+        Movie movie = movieService.getMovie(movieId);
 
         return movieSessionRepository.findAvailableByMovie(movie.getId());
     }
@@ -77,14 +75,14 @@ public class MovieSessionService {
 
     @Transactional(readOnly = true)
     public List<MovieSession> getByMovieAndDate(long movieId, LocalDate date) {
-        Movie movie = movieRepository.findById(movieId).orElseThrow(() -> new EntityNotFoundException(movieId, Movie.class));
+        Movie movie = movieService.getMovie(movieId);
 
         return movieSessionRepository.findByMovieAndDate(movie.getId(), date);
     }
 
     @Transactional(readOnly = true)
     public List<MovieSession> getAvailableByMovieAndDate(long movieId, LocalDate date) {
-        Movie movie = movieRepository.findById(movieId).orElseThrow(() -> new EntityNotFoundException(movieId, Movie.class));
+        Movie movie = movieService.getMovie(movieId);
 
         return movieSessionRepository.findAvailableByMovieAndDate(movie.getId(), date);
     }

@@ -31,7 +31,7 @@ public class MovieSessionController {
 
     @GetMapping("{id}")
     public MovieSessionDto getById(@PathVariable Long id) {
-        MovieSession movieSession = movieSessionService.getById(id);
+        MovieSession movieSession = movieSessionService.getMovieSession(id);
 
         return mapMovieSessionToMovieSessionDto(movieSession);
     }
