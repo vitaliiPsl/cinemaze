@@ -1,12 +1,12 @@
 package com.example.cinema.service;
 
 import com.example.cinema.exceptions.EntityNotFoundException;
-import com.example.cinema.model.entities.User;
+import com.example.cinema.model.entities.user.User;
 import com.example.cinema.model.entities.booking.Booking;
 import com.example.cinema.model.entities.booking.BookingStatus;
-import com.example.cinema.model.entities.movie.MovieSession;
-import com.example.cinema.model.entities.movie.MovieSessionSeat;
-import com.example.cinema.model.entities.movie.Seat;
+import com.example.cinema.model.entities.session.MovieHallSeat;
+import com.example.cinema.model.entities.session.MovieSession;
+import com.example.cinema.model.entities.session.MovieSessionSeat;
 import com.example.cinema.persistence.BookingRepository;
 import com.example.cinema.persistence.MovieSessionSeatRepository;
 import org.junit.jupiter.api.Test;
@@ -27,7 +27,6 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -332,7 +331,7 @@ class BookingServiceTest {
                 .build();
     }
 
-    private MovieSessionSeat getMovieSessionSeat(long id, boolean booked, Seat hallSeat) {
+    private MovieSessionSeat getMovieSessionSeat(long id, boolean booked, MovieHallSeat hallSeat) {
         return MovieSessionSeat.builder()
                 .id(id)
                 .booked(booked)
@@ -340,8 +339,8 @@ class BookingServiceTest {
                 .build();
     }
 
-    private Seat getHallSeat(long id, int row, int number) {
-        return Seat.builder()
+    private MovieHallSeat getHallSeat(long id, int row, int number) {
+        return MovieHallSeat.builder()
                 .id(id)
                 .row(row)
                 .number(number)

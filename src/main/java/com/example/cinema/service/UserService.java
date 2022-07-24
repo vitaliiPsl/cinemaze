@@ -2,8 +2,8 @@ package com.example.cinema.service;
 
 import com.example.cinema.exceptions.EntityAlreadyExistsException;
 import com.example.cinema.exceptions.EntityNotFoundException;
-import com.example.cinema.model.entities.Role;
-import com.example.cinema.model.entities.User;
+import com.example.cinema.model.entities.user.Role;
+import com.example.cinema.model.entities.user.User;
 import com.example.cinema.persistence.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

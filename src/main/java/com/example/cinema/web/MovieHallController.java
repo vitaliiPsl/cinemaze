@@ -1,7 +1,7 @@
 package com.example.cinema.web;
 
 import com.example.cinema.model.dto.MovieHallDto;
-import com.example.cinema.model.entities.movie.MovieHall;
+import com.example.cinema.model.entities.session.MovieHall;
 import com.example.cinema.service.MovieHallService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;

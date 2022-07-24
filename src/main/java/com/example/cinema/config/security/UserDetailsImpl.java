@@ -1,14 +1,12 @@
 package com.example.cinema.config.security;
 
-import com.example.cinema.model.entities.Role;
-import com.example.cinema.model.entities.User;
+import com.example.cinema.model.entities.user.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class UserDetailsImpl implements UserDetails {
     private final String email;

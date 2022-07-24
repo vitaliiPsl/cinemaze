@@ -1,6 +1,7 @@
-package com.example.cinema.model.entities.movie;
+package com.example.cinema.model.entities.session;
 
 
+import com.example.cinema.model.entities.movie.Movie;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

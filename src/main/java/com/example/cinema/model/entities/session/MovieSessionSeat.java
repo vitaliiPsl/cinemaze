@@ -1,4 +1,4 @@
-package com.example.cinema.model.entities.movie;
+package com.example.cinema.model.entities.session;
 
 import com.example.cinema.model.entities.booking.Booking;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -21,7 +21,7 @@ public class MovieSessionSeat {
     private boolean booked;
 
     @ManyToOne
-    private Seat hallSeat;
+    private MovieHallSeat hallSeat;
 
     @ToString.Exclude
     @JsonIgnore
@@ -33,7 +33,7 @@ public class MovieSessionSeat {
     @ManyToOne
     private Booking booking;
 
-    public MovieSessionSeat(MovieSession movieSession, Seat seat) {
+    public MovieSessionSeat(MovieSession movieSession, MovieHallSeat seat) {
         this.movieSession = movieSession;
         this.hallSeat = seat;
     }

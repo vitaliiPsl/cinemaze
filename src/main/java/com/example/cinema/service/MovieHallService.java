@@ -1,8 +1,8 @@
 package com.example.cinema.service;
 
 import com.example.cinema.exceptions.EntityNotFoundException;
-import com.example.cinema.model.entities.movie.MovieHall;
-import com.example.cinema.model.entities.movie.Seat;
+import com.example.cinema.model.entities.session.MovieHall;
+import com.example.cinema.model.entities.session.MovieHallSeat;
 import com.example.cinema.persistence.MovieHallRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,7 @@ public class MovieHallService {
     public MovieHall saveMovieHall(MovieHall movieHall) {
         log.debug("save movie hall: {}", movieHall);
 
-        Set<Seat> seats = getSeats(movieHall);
+        Set<MovieHallSeat> seats = getSeats(movieHall);
         movieHall.setSeats(seats);
 
         return movieHallRepository.save(movieHall);
@@ -49,12 +49,12 @@ public class MovieHallService {
         return movieHallRepository.findAll();
     }
 
-    private Set<Seat> getSeats(MovieHall movieHall) {
-        Set<Seat> seats = new HashSet<>();
+    private Set<MovieHallSeat> getSeats(MovieHall movieHall) {
+        Set<MovieHallSeat> seats = new HashSet<>();
 
         for (int row = 0; row < movieHall.getNumberOfSeatRows(); row++) {
             for (int seatNumber = 0; seatNumber < movieHall.getNumberOfSeatsPerRow(); seatNumber++) {
-                Seat seat = new Seat();
+                MovieHallSeat seat = new MovieHallSeat();
                 seat.setRow(row);
                 seat.setNumber(seatNumber);
                 seat.setMovieHall(movieHall);

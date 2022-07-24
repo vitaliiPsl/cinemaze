@@ -3,7 +3,7 @@ package com.example.cinema.web;
 import com.example.cinema.config.security.jwt.JwtUtils;
 import com.example.cinema.model.dto.AuthenticationRequestDto;
 import com.example.cinema.model.dto.UserDto;
-import com.example.cinema.model.entities.User;
+import com.example.cinema.model.entities.user.User;
 import com.example.cinema.service.UserService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;

@@ -1,7 +1,7 @@
 package com.example.cinema;
 
-import com.example.cinema.model.entities.Role;
-import com.example.cinema.model.entities.User;
+import com.example.cinema.model.entities.user.Role;
+import com.example.cinema.model.entities.user.User;
 import com.example.cinema.persistence.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;

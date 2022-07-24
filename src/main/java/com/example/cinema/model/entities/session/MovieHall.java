@@ -1,4 +1,4 @@
-package com.example.cinema.model.entities.movie;
+package com.example.cinema.model.entities.session;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,7 +24,7 @@ public class MovieHall {
     private int numberOfSeatsPerRow;
 
     @OneToMany(mappedBy = "movieHall", cascade = CascadeType.ALL)
-    private Set<Seat> seats = new HashSet<>();
+    private Set<MovieHallSeat> seats = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {

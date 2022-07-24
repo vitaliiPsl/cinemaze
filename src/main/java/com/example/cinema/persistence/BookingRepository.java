@@ -1,8 +1,8 @@
 package com.example.cinema.persistence;
 
 import com.example.cinema.model.entities.booking.Booking;
-import com.example.cinema.model.entities.User;
-import com.example.cinema.model.entities.movie.MovieSession;
+import com.example.cinema.model.entities.user.User;
+import com.example.cinema.model.entities.session.MovieSession;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

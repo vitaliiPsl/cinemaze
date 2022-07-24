@@ -1,11 +1,11 @@
 package com.example.cinema.service;
 
 import com.example.cinema.exceptions.EntityNotFoundException;
-import com.example.cinema.model.entities.User;
+import com.example.cinema.model.entities.user.User;
 import com.example.cinema.model.entities.booking.Booking;
 import com.example.cinema.model.entities.booking.BookingStatus;
-import com.example.cinema.model.entities.movie.MovieSession;
-import com.example.cinema.model.entities.movie.MovieSessionSeat;
+import com.example.cinema.model.entities.session.MovieSession;
+import com.example.cinema.model.entities.session.MovieSessionSeat;
 import com.example.cinema.persistence.BookingRepository;
 import com.example.cinema.persistence.MovieSessionSeatRepository;
 import lombok.AllArgsConstructor;

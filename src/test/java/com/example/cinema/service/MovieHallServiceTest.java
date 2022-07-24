@@ -1,7 +1,7 @@
 package com.example.cinema.service;
 
 import com.example.cinema.exceptions.EntityNotFoundException;
-import com.example.cinema.model.entities.movie.MovieHall;
+import com.example.cinema.model.entities.session.MovieHall;
 import com.example.cinema.persistence.MovieHallRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

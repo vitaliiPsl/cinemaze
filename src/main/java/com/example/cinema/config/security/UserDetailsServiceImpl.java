@@ -1,8 +1,7 @@
 package com.example.cinema.config.security;
 
-import com.example.cinema.model.entities.User;
+import com.example.cinema.model.entities.user.User;
 import com.example.cinema.persistence.UserRepository;
-import com.example.cinema.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

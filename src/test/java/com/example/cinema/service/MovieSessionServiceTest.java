@@ -2,9 +2,9 @@ package com.example.cinema.service;
 
 import com.example.cinema.exceptions.EntityNotFoundException;
 import com.example.cinema.model.entities.movie.Movie;
-import com.example.cinema.model.entities.movie.MovieHall;
-import com.example.cinema.model.entities.movie.MovieSession;
-import com.example.cinema.model.entities.movie.Seat;
+import com.example.cinema.model.entities.session.MovieHall;
+import com.example.cinema.model.entities.session.MovieSession;
+import com.example.cinema.model.entities.session.MovieHallSeat;
 import com.example.cinema.persistence.MovieSessionRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -49,7 +49,7 @@ class MovieSessionServiceTest {
         Movie movie = getMovie(movieId, movieDuration);
 
         long movieHallId = 5;
-        Set<Seat> hallSeats = Set.of(
+        Set<MovieHallSeat> hallSeats = Set.of(
                 getSeat(1, 1, 1),
                 getSeat(2, 1, 2)
         );
@@ -310,15 +310,15 @@ class MovieSessionServiceTest {
                 .build();
     }
 
-    private MovieHall getMovieHall(long id, Set<Seat> seats) {
+    private MovieHall getMovieHall(long id, Set<MovieHallSeat> seats) {
         return MovieHall.builder()
                 .id(id)
                 .seats(seats)
                 .build();
     }
 
-    private Seat getSeat(long id, int row, int number) {
-        return Seat.builder()
+    private MovieHallSeat getSeat(long id, int row, int number) {
+        return MovieHallSeat.builder()
                 .id(id)
                 .row(row)
                 .number(number)

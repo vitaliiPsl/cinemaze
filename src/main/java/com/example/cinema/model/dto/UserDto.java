@@ -1,6 +1,6 @@
 package com.example.cinema.model.dto;
 
-import com.example.cinema.model.entities.Role;
+import com.example.cinema.model.entities.user.Role;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 

@@ -1,4 +1,4 @@
-package com.example.cinema.model.entities.movie;
+package com.example.cinema.model.entities.session;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
@@ -11,7 +11,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Seat {
+public class MovieHallSeat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -28,7 +28,7 @@ public class Seat {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Seat seat = (Seat) o;
+        MovieHallSeat seat = (MovieHallSeat) o;
         return row == seat.row && number == seat.number && Objects.equals(movieHall, seat.movieHall);
     }
 

@@ -1,7 +1,7 @@
 package com.example.cinema.model.dto;
 
 import com.example.cinema.model.entities.movie.Genre;
-import com.example.cinema.model.entities.movie.MovieSession;
+import com.example.cinema.model.entities.session.MovieSession;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;

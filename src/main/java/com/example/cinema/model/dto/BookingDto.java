@@ -1,9 +1,9 @@
 package com.example.cinema.model.dto;
 
-import com.example.cinema.model.entities.User;
+import com.example.cinema.model.entities.user.User;
 import com.example.cinema.model.entities.booking.BookingStatus;
-import com.example.cinema.model.entities.movie.MovieSession;
-import com.example.cinema.model.entities.movie.MovieSessionSeat;
+import com.example.cinema.model.entities.session.MovieSession;
+import com.example.cinema.model.entities.session.MovieSessionSeat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;

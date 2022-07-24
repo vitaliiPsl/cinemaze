@@ -1,5 +1,6 @@
 package com.example.cinema.model.entities.movie;
 
+import com.example.cinema.model.entities.session.MovieSession;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;

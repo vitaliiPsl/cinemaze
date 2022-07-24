@@ -1,4 +1,4 @@
-package com.example.cinema.model.entities;
+package com.example.cinema.model.entities.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
