@@ -36,6 +36,9 @@ public class MovieSession {
     @ManyToOne(optional = false)
     private MovieHall movieHall;
 
+    @OneToMany(mappedBy = "movieSession", cascade = CascadeType.ALL)
+    private Set<MovieSessionSeat> seats = new HashSet<>();
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -4,6 +4,7 @@ import com.example.cinema.exceptions.EntityNotFoundException;
 import com.example.cinema.model.entities.movie.Movie;
 import com.example.cinema.model.entities.movie.MovieHall;
 import com.example.cinema.model.entities.movie.MovieSession;
+import com.example.cinema.model.entities.movie.Seat;
 import com.example.cinema.persistence.MovieSessionRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
@@ -47,7 +49,11 @@ class MovieSessionServiceTest {
         Movie movie = getMovie(movieId, movieDuration);
 
         long movieHallId = 5;
-        MovieHall movieHall = getMovieHall(movieHallId);
+        Set<Seat> hallSeats = Set.of(
+                getSeat(1, 1, 1),
+                getSeat(2, 1, 2)
+        );
+        MovieHall movieHall = getMovieHall(movieHallId, hallSeats);
 
         LocalDateTime startsAt = LocalDateTime.now().plusDays(5);
         MovieSession movieSession = getMovieSession(0, startsAt, null);
@@ -74,6 +80,7 @@ class MovieSessionServiceTest {
         assertThat(result.getMovie(), is(movie));
         assertThat(result.getMovieHall(), is(movieHall));
         assertThat(result.getEndsAt(), is(startsAt.plusMinutes(movieDuration)));
+        assertThat(result.getSeats(), hasSize(hallSeats.size()));
     }
 
     @Test
@@ -84,7 +91,7 @@ class MovieSessionServiceTest {
         Movie movie = getMovie(movieId, movieDuration);
 
         long movieHallId = 5;
-        MovieHall movieHall = getMovieHall(movieHallId);
+        MovieHall movieHall = getMovieHall(movieHallId, Set.of());
 
         LocalDateTime startsAt = LocalDateTime.now().plusDays(5);
         MovieSession movieSession = getMovieSession(0, startsAt, null);
@@ -303,9 +310,18 @@ class MovieSessionServiceTest {
                 .build();
     }
 
-    private MovieHall getMovieHall(long id) {
+    private MovieHall getMovieHall(long id, Set<Seat> seats) {
         return MovieHall.builder()
                 .id(id)
+                .seats(seats)
+                .build();
+    }
+
+    private Seat getSeat(long id, int row, int number) {
+        return Seat.builder()
+                .id(id)
+                .row(row)
+                .number(number)
                 .build();
     }
 

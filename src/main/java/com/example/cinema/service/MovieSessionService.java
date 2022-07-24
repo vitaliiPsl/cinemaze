@@ -1,9 +1,7 @@
 package com.example.cinema.service;
 
 import com.example.cinema.exceptions.EntityNotFoundException;
-import com.example.cinema.model.entities.movie.Movie;
-import com.example.cinema.model.entities.movie.MovieHall;
-import com.example.cinema.model.entities.movie.MovieSession;
+import com.example.cinema.model.entities.movie.*;
 import com.example.cinema.persistence.MovieSessionRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @AllArgsConstructor
@@ -40,6 +40,9 @@ public class MovieSessionService {
             throw new IllegalStateException("There is another movie at hall " + movieHallId + " at that time");
         }
         movieSession.setMovieHall(movieHall);
+
+        Set<MovieSessionSeat> sessionSeats = getSessionSeats(movieSession, movieHall);
+        movieSession.setSeats(sessionSeats);
 
         return movieSessionRepository.save(movieSession);
     }
@@ -95,6 +98,17 @@ public class MovieSessionService {
     @Transactional(readOnly = true)
     public List<MovieSession> getAll() {
         return movieSessionRepository.findAll();
+    }
+
+    private Set<MovieSessionSeat> getSessionSeats(MovieSession session, MovieHall hall) {
+        Set<MovieSessionSeat> sessionSeats = new HashSet<>();
+
+        for (Seat hallSeat : hall.getSeats()) {
+            MovieSessionSeat sessionSeat = new MovieSessionSeat(session, hallSeat);
+            sessionSeats.add(sessionSeat);
+        }
+
+        return sessionSeats;
     }
 
     private boolean checkMovieHallAvailability(MovieHall movieHall, LocalDateTime startsAt, LocalDateTime endsAt) {

@@ -2,6 +2,7 @@ package com.example.cinema.model.dto;
 
 import com.example.cinema.model.entities.movie.Movie;
 import com.example.cinema.model.entities.movie.MovieHall;
+import com.example.cinema.model.entities.movie.MovieSessionSeat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -31,6 +32,7 @@ public class MovieSessionDto {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private long movieHallId;
 
+    @JsonIgnoreProperties("seats")
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private MovieHall movieHall;
 
@@ -43,14 +45,8 @@ public class MovieSessionDto {
     @Min(value = 0, message = "Session price cannot be negative")
     private double price;
 
-    @NotNull(message = "You have to provide the date of movie session")
-    private LocalDate date;
-
-    @NotNull(message = "You have to provide starting time of the session")
-    private LocalTime startsAt;
-
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private LocalTime endsAt;
+    @JsonIgnoreProperties("movieSession")
+    private Set<MovieSessionSeat> seats = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {
