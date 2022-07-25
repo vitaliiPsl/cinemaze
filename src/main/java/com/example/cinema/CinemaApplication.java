@@ -38,6 +38,7 @@ public class CinemaApplication {
 
     private void saveAdmin(PasswordEncoder passwordEncoder, UserRepository userRepository) {
         User admin = getDefaultUser();
+        admin.setEnabled(true);
 
         String encodedPassword = passwordEncoder.encode(adminPassword);
         admin.setPassword(encodedPassword);

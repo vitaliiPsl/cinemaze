@@ -11,11 +11,13 @@ import java.util.List;
 public class UserDetailsImpl implements UserDetails {
     private final String email;
     private final String password;
+    private final boolean enabled;
     private final List<GrantedAuthority> grantedAuthorities;
 
     public UserDetailsImpl(User user) {
         this.email = user.getEmail();
         this.password = user.getPassword();
+        this.enabled = user.isEnabled();
         this.grantedAuthorities = List.of(new SimpleGrantedAuthority(user.getRole().toString()));
     }
 
@@ -51,6 +53,6 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 }

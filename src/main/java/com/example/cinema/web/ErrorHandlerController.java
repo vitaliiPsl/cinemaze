@@ -3,6 +3,7 @@ package com.example.cinema.web;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.example.cinema.exceptions.EntityAlreadyExistsException;
 import com.example.cinema.exceptions.EntityNotFoundException;
+import com.example.cinema.exceptions.InvalidRegistrationToken;
 import com.example.cinema.exceptions.UnsupportedImageTypeException;
 import com.example.cinema.model.errors.ApiError;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +39,14 @@ public class ErrorHandlerController {
         return buildResponseEntity(new ApiError(HttpStatus.FORBIDDEN, error, e));
     }
 
+    @ExceptionHandler(InvalidRegistrationToken.class)
+    public ResponseEntity<ApiError> handleInvalidRegistrationToken(InvalidRegistrationToken e) {
+        log.error("handleInvalidRegistrationToken: {}", e.getMessage(), e);
+
+        String message = "Invalid registration token";
+        return buildResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, message, e));
+    }
+
     @ExceptionHandler(HttpMessageNotReadableException.class)
     protected ResponseEntity<ApiError> handleHttpMessageNotReadable(HttpMessageNotReadableException e) {
         log.error("handleHttpMessageNotReadable: {}", e.getMessage(), e);
@@ -54,7 +63,7 @@ public class ErrorHandlerController {
     }
 
     @ExceptionHandler(EntityAlreadyExistsException.class)
-    protected ResponseEntity<ApiError> handleEntityAlreadyExistsException(EntityAlreadyExistsException e){
+    protected ResponseEntity<ApiError> handleEntityAlreadyExistsException(EntityAlreadyExistsException e) {
         log.error("handleEntityAlreadyExistsException: {}", e.getMessage(), e);
 
         return buildResponseEntity(new ApiError(BAD_REQUEST, e.getMessage(), e));
@@ -80,7 +89,7 @@ public class ErrorHandlerController {
     }
 
     @ExceptionHandler(AmazonS3Exception.class)
-    protected ResponseEntity<ApiError> handleAmazonS3Exception(AmazonS3Exception e){
+    protected ResponseEntity<ApiError> handleAmazonS3Exception(AmazonS3Exception e) {
         log.error("handleEntityAlreadyExists: {}", e.getMessage(), e);
 
         ApiError apiError = new ApiError(NOT_FOUND, "Couldn't find the image", e);
