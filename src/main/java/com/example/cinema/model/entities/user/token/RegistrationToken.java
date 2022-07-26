@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Builder
 @Data
@@ -38,5 +39,18 @@ public class RegistrationToken {
         this.createdAt = LocalDateTime.now();
         this.expiresAt = createdAt.plusMinutes(15);
         this.user = user;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RegistrationToken that = (RegistrationToken) o;
+        return Objects.equals(token, that.token) && Objects.equals(user, that.user);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(token, user);
     }
 }
