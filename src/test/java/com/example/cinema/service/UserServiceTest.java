@@ -1,8 +1,6 @@
 package com.example.cinema.service;
 
-import com.example.cinema.exceptions.EntityAlreadyExistsException;
 import com.example.cinema.exceptions.EntityNotFoundException;
-import com.example.cinema.model.entities.user.Role;
 import com.example.cinema.model.entities.user.User;
 import com.example.cinema.persistence.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -10,7 +8,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,7 +15,6 @@ import java.util.Optional;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -26,51 +22,10 @@ import static org.mockito.Mockito.when;
 class UserServiceTest {
 
     @Mock
-    PasswordEncoder passwordEncoder;
-
-    @Mock
     UserRepository userRepository;
 
     @InjectMocks
     UserService userService;
-
-    @Test
-    void testRegisterClient() {
-        // given
-        String email = "test@mail.com";
-        String password = "password";
-        String encodedPassword = "encoded";
-
-        User user = getUser(0, email, password);
-
-        // when
-        when(passwordEncoder.encode(password)).thenReturn(encodedPassword);
-        when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
-        when(userRepository.save(user)).thenReturn(user);
-
-        User result = userService.saveClient(user);
-
-        // then
-        verify(passwordEncoder).encode(anyString());
-        verify(userRepository).save(user);
-
-        assertThat(result.getPassword(), equalTo(encodedPassword));
-        assertThat(result.getRole(), equalTo(Role.CLIENT));
-        assertThat(result.getEmail(), equalTo(email));
-    }
-
-    @Test
-    void testRegisterClientThrowsExceptionIfUserAlreadyExists() {
-        // given
-        String email = "test@mail.com";
-        User user = getUser(0, email, "");
-
-        // when
-        when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
-
-        // then
-        assertThrows(EntityAlreadyExistsException.class, () -> userService.saveClient(user));
-    }
 
     @Test
     void testDeleteUser() {

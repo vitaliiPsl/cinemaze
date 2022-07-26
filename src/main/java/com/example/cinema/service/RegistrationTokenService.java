@@ -16,10 +16,10 @@ import java.util.Optional;
 public class RegistrationTokenService {
     private final RegistrationTokenRepository tokenRepository;
 
-    public void saveToken(RegistrationToken token) {
+    public RegistrationToken saveToken(RegistrationToken token) {
         log.debug("Save registration token: {}", token);
 
-        tokenRepository.save(token);
+        return tokenRepository.save(token);
     }
 
     @Transactional(readOnly = true)
