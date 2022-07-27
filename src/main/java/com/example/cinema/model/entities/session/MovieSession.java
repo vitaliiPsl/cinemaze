@@ -2,7 +2,6 @@ package com.example.cinema.model.entities.session;
 
 
 import com.example.cinema.model.entities.movie.Movie;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,7 +29,6 @@ public class MovieSession {
 
     private LocalDateTime endsAt;
 
-    @JsonIgnoreProperties("sessions")
     @ManyToOne(optional = false)
     private Movie movie;
 

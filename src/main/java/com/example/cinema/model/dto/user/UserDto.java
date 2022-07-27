@@ -1,4 +1,4 @@
-package com.example.cinema.model.dto;
+package com.example.cinema.model.dto.user;
 
 import com.example.cinema.model.entities.user.Role;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -14,6 +14,8 @@ public class UserDto {
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private long id;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Role role;
 
     @NotBlank(message = "First name is required")

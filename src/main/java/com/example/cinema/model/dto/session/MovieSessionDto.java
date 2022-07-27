@@ -1,8 +1,6 @@
-package com.example.cinema.model.dto;
+package com.example.cinema.model.dto.session;
 
-import com.example.cinema.model.entities.movie.Movie;
-import com.example.cinema.model.entities.session.MovieHall;
-import com.example.cinema.model.entities.session.MovieSessionSeat;
+import com.example.cinema.model.dto.movie.MovieDto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -20,22 +18,6 @@ public class MovieSessionDto {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private long id;
 
-    @NotNull(message = "You need to provide id of the movie that will be played during the session")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private long movieId;
-
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @JsonIgnoreProperties("sessions")
-    private Movie movie;
-
-    @NotNull(message = "You need to provide id of the movie hall where session will take place")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private long movieHallId;
-
-    @JsonIgnoreProperties("seats")
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private MovieHall movieHall;
-
     @NotNull(message = "You have to provide the time of the session beginning")
     private LocalDateTime startsAt;
 
@@ -44,9 +26,25 @@ public class MovieSessionDto {
 
     @Min(value = 0, message = "Session price cannot be negative")
     private double price;
+    @NotNull(message = "You need to provide id of the movie that will be played during the session")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private long movieId;
 
-    @JsonIgnoreProperties("movieSession")
-    private Set<MovieSessionSeat> seats = new HashSet<>();
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonIgnoreProperties("sessions")
+    private MovieDto movie;
+
+    @NotNull(message = "You need to provide id of the movie hall where session will take place")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private long movieHallId;
+
+    @JsonIgnoreProperties("seats")
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private MovieHallDto movieHall;
+
+
+    @JsonIgnoreProperties({"booking", "movieSession"})
+    private Set<MovieSessionSeatDto> seats = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {

@@ -1,7 +1,6 @@
-package com.example.cinema.model.dto;
+package com.example.cinema.model.dto.movie;
 
-import com.example.cinema.model.entities.movie.Genre;
-import com.example.cinema.model.entities.session.MovieSession;
+import com.example.cinema.model.dto.session.MovieSessionDto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -34,16 +33,15 @@ public class MovieDto {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate releaseDate;
 
+    private String trailerUrl;
     private String posterImage;
     private Set<String> previewImages = new HashSet<>();
 
-    private String trailerUrl;
-
     @JsonIgnoreProperties("movies")
-    private Set<Genre> genres = new HashSet<>();
+    private Set<GenreDto> genres = new HashSet<>();
 
     @JsonIgnoreProperties("movie")
-    private Set<MovieSession> sessions = new HashSet<>();
+    private Set<MovieSessionDto> sessions = new HashSet<>();
 
     private Set<String> directors = new HashSet<>();
     private Set<String> actors = new HashSet<>();

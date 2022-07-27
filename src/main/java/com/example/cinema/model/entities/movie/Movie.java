@@ -1,7 +1,6 @@
 package com.example.cinema.model.entities.movie;
 
 import com.example.cinema.model.entities.session.MovieSession;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -31,9 +30,7 @@ public class Movie {
 
     private long duration;
 
-    @JsonIgnoreProperties("movies")
     @ManyToMany(fetch = FetchType.EAGER)
-    @ToString.Exclude
     private Set<Genre> genres = new HashSet<>();
 
     @ElementCollection(fetch = FetchType.EAGER)
@@ -50,8 +47,8 @@ public class Movie {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate releaseDate;
 
-    @OneToMany(mappedBy = "movie", cascade = CascadeType.REMOVE)
     @ToString.Exclude
+    @OneToMany(mappedBy = "movie")
     private Set<MovieSession> sessions = new HashSet<>();
 
     @Override

@@ -1,6 +1,6 @@
 package com.example.cinema.web;
 
-import com.example.cinema.model.dto.GenreDto;
+import com.example.cinema.model.dto.movie.GenreDto;
 import com.example.cinema.model.entities.movie.Genre;
 import com.example.cinema.service.GenreService;
 import lombok.AllArgsConstructor;

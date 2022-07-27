@@ -1,8 +1,8 @@
 package com.example.cinema.web;
 
-import com.example.cinema.model.dto.AuthenticationRequestDto;
-import com.example.cinema.model.dto.AuthenticationResponseDto;
-import com.example.cinema.model.dto.UserDto;
+import com.example.cinema.model.dto.auth.AuthenticationRequestDto;
+import com.example.cinema.model.dto.auth.AuthenticationResponseDto;
+import com.example.cinema.model.dto.user.UserDto;
 import com.example.cinema.model.entities.user.User;
 import com.example.cinema.model.entities.user.token.RegistrationToken;
 import com.example.cinema.service.AuthService;

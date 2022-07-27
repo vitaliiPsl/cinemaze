@@ -1,9 +1,9 @@
-package com.example.cinema.model.dto;
+package com.example.cinema.model.dto.booking;
 
-import com.example.cinema.model.entities.user.User;
+import com.example.cinema.model.dto.session.MovieSessionDto;
+import com.example.cinema.model.dto.session.MovieSessionSeatDto;
+import com.example.cinema.model.dto.user.UserDto;
 import com.example.cinema.model.entities.booking.BookingStatus;
-import com.example.cinema.model.entities.session.MovieSession;
-import com.example.cinema.model.entities.session.MovieSessionSeat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -31,16 +31,15 @@ public class BookingDto {
     private double totalPrice;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @JsonIgnoreProperties("bookings")
-    private User user;
+    private UserDto user;
 
     @NotNull(message = "You have to provide id of the movie session")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private long movieSessionId;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @JsonIgnoreProperties({"bookings", "bookedSeats"})
-    private MovieSession movieSession;
+    @JsonIgnoreProperties({"bookings", "seats"})
+    private MovieSessionDto movieSession;
 
     @Size(min = 1, message = "You have to choose at least one seat")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -48,7 +47,7 @@ public class BookingDto {
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @JsonIgnoreProperties({"booking", "movieSession"})
-    private Set<MovieSessionSeat> seats = new HashSet<>();
+    private Set<MovieSessionSeatDto> seats = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {

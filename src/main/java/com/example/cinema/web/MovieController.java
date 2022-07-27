@@ -1,6 +1,6 @@
 package com.example.cinema.web;
 
-import com.example.cinema.model.dto.MovieDto;
+import com.example.cinema.model.dto.movie.MovieDto;
 import com.example.cinema.model.entities.movie.Movie;
 import com.example.cinema.service.ImageService;
 import com.example.cinema.service.MovieService;

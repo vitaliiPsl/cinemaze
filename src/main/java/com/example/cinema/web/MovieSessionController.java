@@ -1,6 +1,6 @@
 package com.example.cinema.web;
 
-import com.example.cinema.model.dto.MovieSessionDto;
+import com.example.cinema.model.dto.session.MovieSessionDto;
 import com.example.cinema.model.entities.session.MovieSession;
 import com.example.cinema.service.MovieSessionService;
 import lombok.AllArgsConstructor;

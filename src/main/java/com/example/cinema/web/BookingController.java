@@ -1,6 +1,6 @@
 package com.example.cinema.web;
 
-import com.example.cinema.model.dto.BookingDto;
+import com.example.cinema.model.dto.booking.BookingDto;
 import com.example.cinema.model.entities.booking.Booking;
 import com.example.cinema.service.BookingService;
 import lombok.AllArgsConstructor;

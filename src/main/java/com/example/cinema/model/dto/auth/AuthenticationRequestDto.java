@@ -1,4 +1,4 @@
-package com.example.cinema.model.dto;
+package com.example.cinema.model.dto.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

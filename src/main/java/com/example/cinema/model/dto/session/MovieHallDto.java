@@ -1,6 +1,5 @@
-package com.example.cinema.model.dto;
+package com.example.cinema.model.dto.session;
 
-import com.example.cinema.model.entities.session.MovieHallSeat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -23,7 +22,7 @@ public class MovieHallDto {
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @JsonIgnoreProperties("movieHall")
-    private Set<MovieHallSeat> seats = new HashSet<>();
+    private Set<MovieHallSeatDto> seats = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {
