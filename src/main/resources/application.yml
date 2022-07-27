@@ -29,6 +29,9 @@ spring:
           starttls:
             enable: true
 
+mail:
+  from: ${MAIL_FROM:noreply@example.com}
+
 logging:
   level:
     root: INFO
