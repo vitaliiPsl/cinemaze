@@ -1,18 +1,22 @@
 package com.example.cinema.model.dto;
 
 import com.example.cinema.model.entities.movie.Movie;
-import com.example.cinema.model.entities.movie.MovieHall;
+import com.example.cinema.model.entities.session.MovieHall;
+import com.example.cinema.model.entities.session.MovieSessionSeat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 @Data
 public class MovieSessionDto {
+
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private long id;
 
@@ -28,18 +32,32 @@ public class MovieSessionDto {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private long movieHallId;
 
+    @JsonIgnoreProperties("seats")
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private MovieHall movieHall;
 
-    @Min(0)
-    private double price;
-
-    @NotNull(message = "You have to provide the date of movie session")
-    private LocalDate date;
-
-    @NotNull(message = "You have to provide starting time of the session")
-    private LocalTime startsAt;
+    @NotNull(message = "You have to provide the time of the session beginning")
+    private LocalDateTime startsAt;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private LocalTime endsAt;
+    private LocalDateTime endsAt;
+
+    @Min(value = 0, message = "Session price cannot be negative")
+    private double price;
+
+    @JsonIgnoreProperties("movieSession")
+    private Set<MovieSessionSeat> seats = new HashSet<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MovieSessionDto that = (MovieSessionDto) o;
+        return movieId == that.movieId && movieHallId == that.movieHallId && Objects.equals(startsAt, that.startsAt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(movieId, movieHallId, startsAt);
+    }
 }

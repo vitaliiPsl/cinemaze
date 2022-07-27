@@ -1,16 +1,20 @@
-package com.example.cinema.model.entities.movie;
+package com.example.cinema.model.entities.session;
 
 
-import com.example.cinema.config.jpa.converters.LocalTimeConverter;
+import com.example.cinema.model.entities.movie.Movie;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
+@Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,30 +26,30 @@ public class MovieSession {
 
     private double price;
 
-    private LocalDate date;
+    private LocalDateTime startsAt;
 
-    @Convert(converter = LocalTimeConverter.class)
-    private LocalTime startsAt;
+    private LocalDateTime endsAt;
 
-    @Convert(converter = LocalTimeConverter.class)
-    private LocalTime endsAt;
-
+    @JsonIgnoreProperties("sessions")
     @ManyToOne(optional = false)
     private Movie movie;
 
     @ManyToOne(optional = false)
     private MovieHall movieHall;
 
+    @OneToMany(mappedBy = "movieSession", cascade = CascadeType.ALL)
+    private Set<MovieSessionSeat> seats = new HashSet<>();
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MovieSession that = (MovieSession) o;
-        return Objects.equals(date, that.date) && Objects.equals(startsAt, that.startsAt) && Objects.equals(movie, that.movie) && Objects.equals(movieHall, that.movieHall);
+        return Objects.equals(startsAt, that.startsAt) && Objects.equals(movie, that.movie) && Objects.equals(movieHall, that.movieHall);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(date, startsAt, movie, movieHall);
+        return Objects.hash(startsAt, movie, movieHall);
     }
 }

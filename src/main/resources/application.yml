@@ -15,6 +15,20 @@ spring:
   mvc:
     format:
       date: yyyy-MM-dd
+  mail:
+    host: localhost
+    port: 1025
+    username: hello
+    password: hello
+
+    properties:
+      mail:
+        smtp:
+          ssl:
+            trust: "*"
+          auth: true
+          starttls:
+            enable: true
 
 logging:
   level:

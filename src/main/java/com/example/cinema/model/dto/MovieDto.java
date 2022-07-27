@@ -1,7 +1,7 @@
 package com.example.cinema.model.dto;
 
 import com.example.cinema.model.entities.movie.Genre;
-import com.example.cinema.model.entities.movie.MovieSession;
+import com.example.cinema.model.entities.session.MovieSession;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,6 +13,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Data
@@ -46,4 +47,17 @@ public class MovieDto {
 
     private Set<String> directors = new HashSet<>();
     private Set<String> actors = new HashSet<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MovieDto movieDto = (MovieDto) o;
+        return Objects.equals(name, movieDto.name) && Objects.equals(releaseDate, movieDto.releaseDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, releaseDate);
+    }
 }

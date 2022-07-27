@@ -1,62 +1,68 @@
 package com.example.cinema.service;
 
 import com.example.cinema.exceptions.EntityNotFoundException;
-import com.example.cinema.model.dto.MovieHallDto;
-import com.example.cinema.model.entities.movie.MovieHall;
+import com.example.cinema.model.entities.session.MovieHall;
+import com.example.cinema.model.entities.session.MovieHallSeat;
 import com.example.cinema.persistence.MovieHallRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 @Slf4j
 @AllArgsConstructor
 @Service
 @Transactional
 public class MovieHallService {
-    private final ModelMapper modelMapper;
     private final MovieHallRepository movieHallRepository;
 
-    public MovieHallDto saveMovieHall(MovieHallDto movieHallDto){
-        log.debug("save movie hall: {}", movieHallDto);
+    public MovieHall saveMovieHall(MovieHall movieHall) {
+        log.debug("save movie hall: {}", movieHall);
 
-        MovieHall movieHall = modelMapper.map(movieHallDto, MovieHall.class);
-        movieHallRepository.save(movieHall);
+        Set<MovieHallSeat> seats = getSeats(movieHall);
+        movieHall.setSeats(seats);
 
-        return modelMapper.map(movieHall, MovieHallDto.class);
+        return movieHallRepository.save(movieHall);
     }
 
-    public MovieHallDto updateMovieHall(long id, MovieHallDto movieHallDto) {
-        log.debug("update movie hall with id {}: {}", id, movieHallDto);
-        movieHallRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, MovieHall.class));
-
-        MovieHall movieHall = modelMapper.map(movieHallDto, MovieHall.class);
-        movieHall.setId(id);
-
-        movieHallRepository.save(movieHall);
-
-        return modelMapper.map(movieHall, MovieHallDto.class);
-    }
-
-    @Transactional(readOnly = true)
-    public MovieHallDto getMovieHall(long id){
-        log.debug("get movie hall by id: {}", id);
-
+    public void deleteMovieHall(long id) {
         MovieHall movieHall = movieHallRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, MovieHall.class));
 
-        return modelMapper.map(movieHall, MovieHallDto.class);
+        movieHallRepository.delete(movieHall);
     }
 
     @Transactional(readOnly = true)
-    public List<MovieHallDto> getAll(){
+    public MovieHall getMovieHall(long id) {
+        log.debug("get movie hall by id: {}", id);
+
+        return movieHallRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, MovieHall.class));
+    }
+
+    @Transactional(readOnly = true)
+    public List<MovieHall> getAll() {
         log.debug("get all movie halls");
 
-        return movieHallRepository.findAll().stream()
-                .map(entity -> modelMapper.map(entity, MovieHallDto.class))
-                .collect(Collectors.toList());
+        return movieHallRepository.findAll();
+    }
+
+    private Set<MovieHallSeat> getSeats(MovieHall movieHall) {
+        Set<MovieHallSeat> seats = new HashSet<>();
+
+        for (int row = 0; row < movieHall.getNumberOfSeatRows(); row++) {
+            for (int seatNumber = 0; seatNumber < movieHall.getNumberOfSeatsPerRow(); seatNumber++) {
+                MovieHallSeat seat = new MovieHallSeat();
+                seat.setRow(row);
+                seat.setNumber(seatNumber);
+                seat.setMovieHall(movieHall);
+
+                seats.add(seat);
+            }
+        }
+
+        return seats;
     }
 }
