@@ -1,7 +1,8 @@
 package com.example.cinema.model.errors;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 
@@ -11,20 +12,24 @@ import java.util.List;
 
 @Data
 public class ApiError {
-    // Request status
+    @Schema(title = "Response status", example = "404")
     private HttpStatus status;
 
-    // User friendly error message
+    @Schema(title = "User-friendly error message", example = "Validation error")
     private String message;
 
-    // Error information in details
+    @Schema(title = "Error information in details", description = "Stack trace")
     private String debugMessage;
 
-    // Time when the error happened
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+    @Schema(title = "Time when the error happened", example = "2022-07-31T15:55:00")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDateTime timestamp = LocalDateTime.now();
 
-    // List of subErrors. Represent errors in single request
+    @Schema(
+            title = "List of sub errors",
+            description = "Represents errors in single request",
+            implementation = ValidationError.class
+    )
     private List<ApiSubError> subErrors = new ArrayList<>();
 
     public ApiError() {
