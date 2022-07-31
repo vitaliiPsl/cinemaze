@@ -10,6 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -45,7 +46,7 @@ public class MovieDto {
 
     @Schema(title = "Movie release date", example = "2013-03-31", required = true)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    @NotBlank(message = "The release date is required")
+    @NotNull(message = "The release date is required")
     private LocalDate releaseDate;
 
     @Schema(title = "Movie trailer URL", example = "https://www.youtube.com/watch?v=mqqft2x_Aa4")

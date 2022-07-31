@@ -42,7 +42,7 @@ public class MovieSessionController {
                     schema = @Schema(implementation = ApiError.class)
             ))
     })
-    @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Movie hall to save")
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Movie session to save")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public MovieSessionDto saveMovieSession(@Valid @RequestBody MovieSessionDto movieSessionDto) {
