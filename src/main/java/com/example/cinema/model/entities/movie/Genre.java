@@ -1,10 +1,6 @@
 package com.example.cinema.model.entities.movie;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -15,7 +11,8 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity @Table(name = "genre")
+@Entity
+@Table(name = "genre")
 public class Genre {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +21,7 @@ public class Genre {
     @Column(name = "genre", unique = true)
     private String genre;
 
-    @JsonIgnoreProperties("genres")
+    @ToString.Exclude
     @ManyToMany(mappedBy = "genres", cascade = CascadeType.REMOVE)
     private Set<Movie> movies = new HashSet<>();
 

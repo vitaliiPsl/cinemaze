@@ -1,7 +1,7 @@
 package com.example.cinema.service;
 
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -11,14 +11,18 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 @Slf4j
-@AllArgsConstructor
 @Service
 @Async
 public class EmailService {
 
+    @Value("${mail.from}")
+    private String sender;
+
     private final JavaMailSender mailSender;
 
-    private static final String SENDER = "noreply@cinemaze.com";
+    public EmailService(JavaMailSender mailSender) {
+        this.mailSender = mailSender;
+    }
 
     public void sendEmailHtml(String subject, String content, String to) {
         log.debug("Sending email to: {}", to);
@@ -27,7 +31,7 @@ public class EmailService {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, "utf-8");
 
-            helper.setFrom(SENDER);
+            helper.setFrom(sender);
             helper.setTo(to);
 
             helper.setSubject(subject);

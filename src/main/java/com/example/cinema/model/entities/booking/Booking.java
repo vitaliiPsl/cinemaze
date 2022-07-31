@@ -1,8 +1,8 @@
 package com.example.cinema.model.entities.booking;
 
-import com.example.cinema.model.entities.user.User;
 import com.example.cinema.model.entities.session.MovieSession;
 import com.example.cinema.model.entities.session.MovieSessionSeat;
+import com.example.cinema.model.entities.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

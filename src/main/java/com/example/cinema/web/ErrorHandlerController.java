@@ -90,7 +90,7 @@ public class ErrorHandlerController {
 
     @ExceptionHandler(AmazonS3Exception.class)
     protected ResponseEntity<ApiError> handleAmazonS3Exception(AmazonS3Exception e) {
-        log.error("handleEntityAlreadyExists: {}", e.getMessage(), e);
+        log.error("handleAmazonS3Exception: {}", e.getMessage(), e);
 
         ApiError apiError = new ApiError(NOT_FOUND, "Couldn't find the image", e);
         return buildResponseEntity(apiError);

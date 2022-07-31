@@ -1,6 +1,5 @@
 package com.example.cinema.model.entities.user;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,7 +25,6 @@ public class User {
     @Column(unique = true)
     private String email;
 
-    @JsonIgnore
     private String password;
 
     private boolean enabled;

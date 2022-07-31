@@ -1,6 +1,5 @@
 package com.example.cinema.model.entities.session;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -20,7 +19,6 @@ public class MovieHallSeat {
     private int number;
 
     @ToString.Exclude
-    @JsonIgnore
     @ManyToOne
     private MovieHall movieHall;
 
