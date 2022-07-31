@@ -1,1 +1,1 @@
-A website for local cinema theatre
+API for cinema theatre
